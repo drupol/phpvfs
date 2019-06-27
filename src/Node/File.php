@@ -6,10 +6,11 @@ namespace drupol\phpvfs\Node;
 
 use drupol\phptree\Node\AttributeNodeInterface;
 
-class File extends VfsNode
+class File extends Vfs implements FileInterface
 {
     /**
      * @param string $id
+     * @param null|string $content
      * @param array $attributes
      *
      * @throws \Exception

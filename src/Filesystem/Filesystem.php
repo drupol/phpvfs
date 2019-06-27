@@ -7,12 +7,24 @@ namespace drupol\phpvfs\Filesystem;
 use drupol\phpvfs\Commands\Cd;
 use drupol\phpvfs\Commands\Touch;
 use drupol\phpvfs\Node\Directory;
+use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\File;
 
-class Vfs
+class Filesystem implements FilesystemInterface
 {
-    public $cwd;
+    /**
+     * @var \drupol\phpvfs\Node\DirectoryInterface
+     */
+    private $cwd;
 
+    /**
+     * Filesystem constructor.
+     *
+     * @param string $id
+     * @param array $attributes
+     *
+     * @throws \Exception
+     */
     public function __construct(
         string $id,
         array $attributes = []
@@ -22,6 +34,9 @@ class Vfs
         $this->cwd = Directory::create($id, $attributes);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function cd(string $id)
     {
         Cd::exec($this, $id);
@@ -29,40 +44,59 @@ class Vfs
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function create(string $id, array $attributes = [])
     {
         return new self($id, $attributes);
     }
 
-    public static function directory(string $id, array $attributes = []): Directory
+    /**
+     * {@inheritdoc}
+     */
+    public static function directory(string $id, array $attributes = []): DirectoryInterface
     {
         return Directory::create($id, $attributes);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function file(string $id, string $content = null, array $attributes = []): File
     {
-        $attributes = ['id' => $id, 'content' => $content] + $attributes;
-
-        return new File($attributes);
+        return File::create($id, $content, $attributes);
     }
 
-    public function getCwd(): Directory
+    /**
+     * {@inheritdoc}
+     */
+    public function getCwd(): DirectoryInterface
     {
         return $this->cwd;
     }
 
-    public function root()
+    /**
+     * {@inheritdoc}
+     */
+    public function root(): DirectoryInterface
     {
         return $this->cwd->root();
     }
 
-    public function setCwd(Directory $dir)
+    /**
+     * {@inheritdoc}
+     */
+    public function setCwd(DirectoryInterface $dir)
     {
         $this->cwd = $dir;
 
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function touch(string $id)
     {
         Touch::exec($this, $id);

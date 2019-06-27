@@ -7,39 +7,33 @@ namespace drupol\phpvfs\Utils;
 class Path implements \IteratorAggregate
 {
     /**
+     * @var bool
+     */
+    private $absolute;
+    /**
      * @var string[]
      */
     private $fragments;
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
-    private $path;
-
-    /**
-     * @var bool
-     */
-    private $absolute;
-
     public function __toString()
     {
-        return ($this->isAbsolute() ? '/' : '') . implode('/', $this->getFragments());
+        return ($this->isAbsolute() ? '/' : '') . \implode('/', $this->getFragments());
     }
 
     /**
-     * @param string $id
-     *
-     * @return \drupol\phpvfs\Utils\Path
+     * {@inheritdoc}
      */
     public static function fromString(string $id)
     {
         $instance = new self();
         $instance->fragments = \explode(
             \DIRECTORY_SEPARATOR,
-            \ltrim($id, DIRECTORY_SEPARATOR)
+            \ltrim($id, \DIRECTORY_SEPARATOR)
         );
-        $instance->absolute = \strpos($id, '/') === 0;
-
+        $instance->absolute = 0 === \strpos($id, '/');
 
         return $instance;
     }
@@ -52,7 +46,7 @@ class Path implements \IteratorAggregate
         $first = \reset($this->fragments);
 
         return empty($first) ?
-            DIRECTORY_SEPARATOR :
+            \DIRECTORY_SEPARATOR :
             $first;
     }
 
@@ -64,17 +58,6 @@ class Path implements \IteratorAggregate
         yield from $this->getFragments();
     }
 
-    protected function getFragments()
-    {
-        $fragments = $this->fragments;
-
-        if (empty($fragments[0])) {
-            $fragments[0] = DIRECTORY_SEPARATOR;
-        }
-
-        return $fragments;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -83,18 +66,41 @@ class Path implements \IteratorAggregate
         return \end($this->fragments);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isAbsolute()
     {
         return $this->absolute;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isValid()
     {
         return \preg_match('/^[^*?"<>|:]*$/', \trim($this->__toString(), ' /'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function shift()
     {
         return \array_shift($this->fragments);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFragments()
+    {
+        $fragments = $this->fragments;
+
+        if (empty($fragments[0])) {
+            $fragments[0] = \DIRECTORY_SEPARATOR;
+        }
+
+        return $fragments;
     }
 }

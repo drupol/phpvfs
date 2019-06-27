@@ -8,9 +8,9 @@ use drupol\phptree\Node\AttributeNode;
 use drupol\phptree\Node\NodeInterface;
 
 /**
- * Class VfsNode.
+ * Class Vfs.
  */
-abstract class VfsNode extends AttributeNode
+abstract class Vfs extends AttributeNode implements VfsInterface
 {
     /**
      * {@inheritdoc}
@@ -20,12 +20,14 @@ abstract class VfsNode extends AttributeNode
         foreach ($nodes as $node) {
             if ($this->getAttribute('id') === $node->getAttribute('id')) {
                 $this->add($node[0]->setParent(null));
+
                 continue;
             }
 
             // If the $cwd contains the nodechild.
             if (false !== $child = $this->contains($node)) {
                 $child->add($node[0]->setParent(null));
+
                 continue;
             }
 
