@@ -15,6 +15,10 @@ abstract class Vfs extends AttributeNode implements VfsInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\DirectoryInterface
      */
     public function add(NodeInterface ...$nodes): NodeInterface
     {

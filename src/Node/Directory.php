@@ -95,19 +95,26 @@ class Directory extends Vfs implements DirectoryInterface
         return $found;
     }
 
+    /**
+     * @param string $id
+     *
+     * @throws \Exception
+     *
+     * @return \drupol\phptree\Node\NodeInterface|\drupol\phpvfs\Node\DirectoryInterface
+     */
     public function mkdir(string $id)
     {
-        return $this->add(Directory::create($id));
+        return $this->add(self::create($id));
     }
 
     /**
-     * @param \drupol\phptree\Node\AttributeNodeInterface $node
+     * @param \drupol\phpvfs\Node\VfsInterface $node
      *
      * @return AttributeNodeInterface|bool
      */
-    protected function contains(AttributeNodeInterface $node)
+    protected function contains(VfsInterface $node)
     {
-        /** @var \drupol\phptree\Node\AttributeNodeInterface $child */
+        /** @var \drupol\phpvfs\Node\VfsInterface $child */
         foreach ($this->children() as $child) {
             if ($node->getAttribute('id') === $child->getAttribute('id')) {
                 return $child;
