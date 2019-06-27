@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
+use drupol\phpvfs\Utils\Path;
+
 class File extends Vfs implements FileInterface
 {
     /**
@@ -17,25 +19,22 @@ class File extends Vfs implements FileInterface
      */
     public static function create(string $id, string $content = null, array $attributes = [])
     {
-        $absolute = false;
-        if (0 === \strpos($id, \DIRECTORY_SEPARATOR, 0)) {
-            $absolute = true;
-        }
+        $path = Path::fromString($id);
 
         if (\DIRECTORY_SEPARATOR !== $id && false !== \strpos($id, \DIRECTORY_SEPARATOR)) {
-            $paths = \array_filter(\explode(\DIRECTORY_SEPARATOR, $id));
-
-            if (true === $absolute) {
-                $paths = \array_merge([\DIRECTORY_SEPARATOR], $paths);
+            if ($path->isAbsolute()) {
+                $firstPart = \DIRECTORY_SEPARATOR;
+            } else {
+                $firstPart = $path->shift();
             }
 
-            $return = $root = self::create(\array_shift($paths));
+            $return = $root = self::create($firstPart, $content, $attributes);
 
-            foreach ($paths as $path) {
-                if (\end($paths) === $path) {
-                    $child = self::create($path, $content, $attributes);
+            foreach ($path->getIterator() as $pathPart) {
+                if ($path->getLastPart() === $pathPart) {
+                    $child = self::create($pathPart, $content, $attributes);
                 } else {
-                    $child = Directory::create($path);
+                    $child = Directory::create($pathPart);
                 }
                 $root->add($child);
                 $root = $child;
