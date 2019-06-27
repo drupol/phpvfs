@@ -4,9 +4,7 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-use drupol\phptree\Node\AttributeNodeInterface;
-
-interface DirectoryInterface extends AttributeNodeInterface
+interface DirectoryInterface extends VfsInterface
 {
     /**
      * @param string $id
