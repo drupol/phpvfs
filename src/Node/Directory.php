@@ -44,7 +44,7 @@ class Directory extends Vfs implements DirectoryInterface
                 $firstPart = $path->shift();
             }
 
-            $return = $root = self::create($firstPart, $attributes);
+            $root = self::create($firstPart, $attributes);
 
             foreach ($path->getIterator() as $pathPart) {
                 $child = new self(['id' => $pathPart]);
@@ -52,7 +52,7 @@ class Directory extends Vfs implements DirectoryInterface
                 $root = $child;
             }
 
-            return $return;
+            return $child;
         }
 
         $attributes = ['id' => $id] + $attributes;

@@ -12,12 +12,12 @@ class Touch
     /**
      * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
      * @param string $id
-     * @param null|string $content
+     * @param string $content
      * @param array $attributes
      *
      * @throws \Exception
      */
-    public static function exec(FilesystemInterface $vfs, string $id, string $content = null, array $attributes = [])
+    public static function exec(FilesystemInterface $vfs, string $id, string $content = '', array $attributes = [])
     {
         $vfs->getCwd()->add(File::create($id, $content, $attributes));
     }

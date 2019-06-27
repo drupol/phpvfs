@@ -12,4 +12,11 @@ interface DirectoryInterface extends VfsInterface
      * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\VfsInterface
      */
     public function containsAttributeId(string $id): ?VfsInterface;
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function mkdir(string $name);
 }

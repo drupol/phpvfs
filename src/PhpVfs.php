@@ -4,37 +4,39 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs;
 
-use drupol\phpvfs\Node\Directory;
+use drupol\phpvfs\Filesystem\FilesystemInterface;
+use drupol\phpvfs\Node\File;
 
 class PhpVfs
 {
-    public const ROOT = '/';
     public const SCHEME = 'phpvfs';
 
-    /**
-     * @var \drupol\phpvfs\Node\Directory
-     */
-    private $root;
+    public $context;
 
     /**
-     * PhpVfs constructor.
+     * @var \drupol\phpvfs\Node\FileInterface
      */
-    public function __construct()
+    private $currentFile;
+
+    public function getVfs(): FilesystemInterface
     {
-        $this->root = $this->mkdir('/', 0777, 0);
+        $options = \stream_context_get_options(\stream_context_get_default());
+
+        return $options[static::SCHEME]['vfs'];
     }
 
+    /**
+     * @param string $path
+     * @param int $mode
+     * @param int $options
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
     public function mkdir(string $path, int $mode, int $options)
     {
-        $paths = \array_filter(\explode('/', $path));
-
-        if ([] === $paths) {
-            return true;
-        }
-
-        foreach ($paths as $pathsItem) {
-            $this->root->add(Directory::create($pathsItem));
-        }
+        $this->getVfs()->getCwd()->mkdir($path);
 
         return true;
     }
@@ -44,56 +46,73 @@ class PhpVfs
         \stream_wrapper_register(self::SCHEME, __CLASS__);
     }
 
-    public function stream_open($dir)
-    {
-        $t = $this->splitPath($dir);
-        $r = $this->resolvePath($dir);
-
-        \xdebug_break();
-    }
     /**
-     * helper method to resolve a path from /foo/bar/. to /foo/bar.
-     *
-     * @param   string  $path
-     *
-     * @return  string
+     * @see http://php.net/streamwrapper.stream-close
      */
-    protected function resolvePath(string $path): string
+    public function stream_close()
     {
-        $newPath = [];
+        $this->currentFile = null;
+    }
 
-        foreach (\explode('/', $path) as $pathPart) {
-            if ('.' === $pathPart || '..' === $pathPart) {
-                continue;
-            }
-
-            $newPath[] = $pathPart;
-
-            if (1 < \count($newPath)) {
-                \array_pop($newPath);
-            }
-        }
-
-        return \implode('/', $newPath);
+    public function stream_eof(): bool
+    {
+        return true;
     }
 
     /**
-     * splits path into its dirname and the basename.
+     * @param string $resource
      *
-     * @param   string  $path
+     * @throws \Exception
      *
-     * @return  string[]
+     * @return bool
      */
-    protected function splitPath(string $path): array
+    public function stream_open(string $resource)
     {
-        $lastSlashPos = \strrpos($path, '/');
-        if (false === $lastSlashPos) {
-            return ['dirname' => '', 'basename' => $path];
+        $resource = $this->stripScheme($resource);
+
+        if (true === $this->getVfs()->exist($resource)) {
+            $this->currentFile = $this->getVfs()->get($resource);
+        } else {
+            $this->currentFile = File::create($resource);
+            $this->getVfs()->getCwd()->add($this->currentFile->root());
         }
 
-        return [
-            'dirname' => \substr($path, 0, $lastSlashPos),
-            'basename' => \substr($path, $lastSlashPos + 1),
-        ];
+        $this->currentFile->position(0);
+
+        return true;
+    }
+
+    /**
+     * @see http://php.net/streamwrapper.stream-read
+     *
+     * @return mixed
+     */
+    public function stream_read(int $bytes)
+    {
+        return $this->currentFile->read($bytes);
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return int
+     */
+    public function stream_write(string $data)
+    {
+        return $this->currentFile->write($data);
+    }
+
+    /**
+     * Returns path stripped of url scheme (http://, ftp://, test:// etc.).
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function stripScheme($path): string
+    {
+        $scheme = \explode('://', $path, 2);
+
+        return '/' . \ltrim(\end($scheme), '/');
     }
 }

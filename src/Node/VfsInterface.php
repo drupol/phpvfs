@@ -18,7 +18,7 @@ interface VfsInterface extends AttributeNodeInterface
     public function getPath(): Path;
 
     /**
-     * @return \drupol\phpvfs\Node\DirectoryInterface
+     * @return \drupol\phpvfs\Node\VfsInterface
      */
-    public function root(): DirectoryInterface;
+    public function root(): VfsInterface;
 }

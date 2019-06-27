@@ -31,7 +31,7 @@ abstract class Vfs extends AttributeNode implements VfsInterface
             }
 
             // If the $cwd contains the nodechild.
-            if (false !== $child = $this->contains($node)) {
+            if (null !== $child = $this->contains($node)) {
                 $child->add($node[0]->setParent(null));
 
                 continue;
@@ -62,7 +62,7 @@ abstract class Vfs extends AttributeNode implements VfsInterface
     /**
      * {@inheritdoc}
      */
-    public function root(): DirectoryInterface
+    public function root(): VfsInterface
     {
         $root = $this;
 
@@ -78,7 +78,7 @@ abstract class Vfs extends AttributeNode implements VfsInterface
      *
      * @return bool|\drupol\phpvfs\Node\VfsInterface
      */
-    protected function contains(VfsInterface $node)
+    protected function contains(VfsInterface $node): ?VfsInterface
     {
         /** @var \drupol\phpvfs\Node\VfsInterface $child */
         foreach ($this->children() as $child) {
@@ -87,6 +87,6 @@ abstract class Vfs extends AttributeNode implements VfsInterface
             }
         }
 
-        return false;
+        return null;
     }
 }

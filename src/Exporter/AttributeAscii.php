@@ -11,17 +11,14 @@ use drupol\phpvfs\Node\VfsInterface;
 class AttributeAscii extends Ascii
 {
     /**
-     * {@inheritdoc}
+     * @param VfsInterface $node
+     *   The node.
+     *
+     * @return string
+     *   The node representation.
      */
     protected function getNodeRepresentation(NodeInterface $node): string
     {
         return $node->getPath()->__toString();
-    }
-    /**
-     * {@inheritdoc}
-     */
-    protected function isValidNode(NodeInterface $node): bool
-    {
-        return $node instanceof VfsInterface;
     }
 }

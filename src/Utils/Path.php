@@ -23,6 +23,16 @@ class Path implements \IteratorAggregate
         return ($this->isAbsolute() ? '/' : '') . \implode('/', $this->getFragments());
     }
 
+    public function basename()
+    {
+        return $this->getLastPart();
+    }
+
+    public function dirname()
+    {
+        return ($this->isAbsolute() ? '/' : '') . \implode('/', \array_slice($this->getFragments(), 0, -1));
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -72,6 +82,11 @@ class Path implements \IteratorAggregate
     public function isAbsolute()
     {
         return $this->absolute;
+    }
+
+    public function isRoot()
+    {
+        return '' === $this->basename();
     }
 
     /**

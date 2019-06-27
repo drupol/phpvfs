@@ -6,11 +6,13 @@ namespace drupol\phpvfs\Filesystem;
 
 use drupol\phpvfs\Commands\Cd;
 use drupol\phpvfs\Commands\Exist;
+use drupol\phpvfs\Commands\Get;
 use drupol\phpvfs\Commands\Inspect;
 use drupol\phpvfs\Commands\Touch;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\File;
+use drupol\phpvfs\Node\VfsInterface;
 
 class Filesystem implements FilesystemInterface
 {
@@ -65,6 +67,9 @@ class Filesystem implements FilesystemInterface
         return Directory::create($id, $attributes);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function exist(string $id): bool
     {
         return Exist::exec($this, $id);
@@ -73,9 +78,17 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public static function file(string $id, string $content = null, array $attributes = []): File
+    public static function file(string $id, string $content = '', array $attributes = []): File
     {
         return File::create($id, $content, $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get(string $id): ?VfsInterface
+    {
+        return Get::exec($this, $id);
     }
 
     /**
@@ -86,6 +99,9 @@ class Filesystem implements FilesystemInterface
         return $this->cwd;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function inspect(string $id): string
     {
         return Inspect::exec($this, $id);
@@ -94,7 +110,7 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function root(): DirectoryInterface
+    public function root(): VfsInterface
     {
         return $this->cwd->root();
     }

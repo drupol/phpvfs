@@ -3,7 +3,7 @@
     "type": "library",
     "description": "An implementation of virtual file system in PHP.",
     "keywords": [
-        "virtual filesystem",
+        "virtual filesystem"
     ],
     "license": "MIT",
     "authors": [
@@ -27,17 +27,16 @@
         "phptaskman/changelog": "^1.0",
         "scrutinizer/ocular": "^1"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "/home/pol/dev/git/phptree"
-        }
-    ],
     "config": {
         "platform": {
             "php": "7.1.28"
         },
         "sort-packages": true
+    },
+    "extra": {
+        "grumphp": {
+            "config-default-path": "vendor/drupol/php-conventions/config/php7/grumphp.yml"
+        }
     },
     "autoload": {
         "psr-4": {
@@ -51,16 +50,17 @@
             "spec\\drupol\\phpvfs\\": "spec/drupol/phptree/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/home/pol/dev/git/phptree"
+        }
+    ],
     "scripts": {
         "apigen": "./vendor/bin/apigen generate src --destination build/docs",
         "bench": "./vendor/bin/phpbench run --report=aggregate --store --precision=3",
         "grumphp": "./vendor/bin/grumphp run",
         "infection": "./vendor/bin/infection run -j 10",
         "scrutinizer": "./vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml"
-    },
-    "extra": {
-        "grumphp": {
-            "config-default-path": "vendor/drupol/php-conventions/config/php7/grumphp.yml"
-        }
     }
 }
