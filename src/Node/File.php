@@ -102,37 +102,6 @@ class File extends Vfs implements FileInterface
         return \str_replace('//', '/', \implode('/', $paths));
     }
 
-    public function mkdir(string $id)
-    {
-        $cwd = $this;
-
-        if (0 === \strpos($id, \DIRECTORY_SEPARATOR, 0)) {
-            $cwd = $this->root();
-        }
-
-        if (\DIRECTORY_SEPARATOR !== $id && false !== \strpos($id, \DIRECTORY_SEPARATOR)) {
-            $paths = \array_values(\array_filter(\explode(\DIRECTORY_SEPARATOR, $id)));
-
-            if ([] !== $paths && false !== $child = $cwd->contains(Directory::create($paths[0]))) {
-                \array_shift($paths);
-
-                return $child->mkdir(\implode(\DIRECTORY_SEPARATOR, $paths));
-            }
-
-            foreach ($paths as $path) {
-                $child = new self(['id' => $path]);
-                $cwd->add($child);
-                $cwd = $child;
-            }
-
-            return $this;
-        }
-
-        $this->add(Directory::create($id));
-
-        return $this;
-    }
-
     public function root(): AttributeNodeInterface
     {
         $root = $this;

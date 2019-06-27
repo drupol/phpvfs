@@ -62,6 +62,11 @@ class Filesystem implements FilesystemInterface
         return Directory::create($id, $attributes);
     }
 
+    public function exist(string $id): bool
+    {
+        return Exist::exec($this, $id);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -76,6 +81,11 @@ class Filesystem implements FilesystemInterface
     public function getCwd(): DirectoryInterface
     {
         return $this->cwd;
+    }
+
+    public function inspect(string $id): string
+    {
+        return Inspect::exec($this, $id);
     }
 
     /**
@@ -104,14 +114,5 @@ class Filesystem implements FilesystemInterface
         Touch::exec($this, $id);
 
         return $this;
-    }
-
-    public function inspect(string $id): string {
-        return Inspect::exec($this, $id);
-    }
-
-    public function exist(string $id): bool
-    {
-        return Exist::exec($this, $id);
     }
 }

@@ -23,8 +23,8 @@ class Exist
                 $vfs->getCwd();
 
             foreach ($path->getIterator() as $pathPart) {
-                if ($pathPart === DIRECTORY_SEPARATOR) {
-                  $existId = true;
+                if (\DIRECTORY_SEPARATOR === $pathPart) {
+                    $existId = true;
                 } elseif (null !== $child = $cwd->containsAttributeId($pathPart)) {
                     $existId = true;
                     $cwd = $child;

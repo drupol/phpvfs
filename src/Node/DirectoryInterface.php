@@ -8,16 +8,15 @@ use drupol\phptree\Node\AttributeNodeInterface;
 
 interface DirectoryInterface extends AttributeNodeInterface
 {
-
     /**
      * @param string $id
      *
-     * @return \drupol\phpvfs\Node\VfsInterface|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|null
+     * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\VfsInterface
      */
     public function containsAttributeId(string $id): ?VfsInterface;
 
     /**
-     * @return \drupol\phpvfs\Node\DirectoryInterface|null
+     * @return null|\drupol\phpvfs\Node\DirectoryInterface
      */
     public function root(): ?DirectoryInterface;
 }
