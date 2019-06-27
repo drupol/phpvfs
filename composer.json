@@ -2,13 +2,8 @@
     "name": "drupol/phpvfs",
     "type": "library",
     "description": "An implementation of virtual file system in PHP.",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "keywords": [
-        "tree",
-        "php",
-        "data structure",
-        "binary tree"
+        "virtual filesystem",
     ],
     "license": "MIT",
     "authors": [
