@@ -51,5 +51,4 @@ class File extends Vfs implements FileInterface
 
         return new self($attributes);
     }
-
 }

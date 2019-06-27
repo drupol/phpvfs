@@ -22,6 +22,7 @@ abstract class Vfs extends AttributeNode implements VfsInterface
      */
     public function add(NodeInterface ...$nodes): NodeInterface
     {
+        /** @var \drupol\phpvfs\Node\VfsInterface $node */
         foreach ($nodes as $node) {
             if ($this->getAttribute('id') === $node->getAttribute('id')) {
                 $this->add($node[0]->setParent(null));
