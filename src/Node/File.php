@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-use drupol\phptree\Node\AttributeNodeInterface;
-
 class File extends Vfs implements FileInterface
 {
     /**
@@ -54,20 +52,4 @@ class File extends Vfs implements FileInterface
         return new self($attributes);
     }
 
-    /**
-     * @param \drupol\phptree\Node\AttributeNodeInterface $node
-     *
-     * @return AttributeNodeInterface|bool
-     */
-    protected function contains(AttributeNodeInterface $node)
-    {
-        /** @var \drupol\phptree\Node\AttributeNodeInterface $child */
-        foreach ($this->children() as $child) {
-            if ($node->getAttribute('id') === $child->getAttribute('id')) {
-                return $child;
-            }
-        }
-
-        return false;
-    }
 }
