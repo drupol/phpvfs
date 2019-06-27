@@ -11,4 +11,6 @@ interface FilesystemInterface
     public function getCwd(): DirectoryInterface;
 
     public function setCwd(DirectoryInterface $directory);
+
+    public function inspect(string $id): string;
 }
