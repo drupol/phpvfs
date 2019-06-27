@@ -89,30 +89,6 @@ class File extends Vfs implements FileInterface
         return $found;
     }
 
-    public function getPath()
-    {
-        $paths = [
-            $this->getAttribute('id'),
-        ];
-
-        foreach ($this->getAncestors() as $ancestor) {
-            \array_unshift($paths, $ancestor->getAttribute('id'));
-        }
-
-        return \str_replace('//', '/', \implode('/', $paths));
-    }
-
-    public function root(): AttributeNodeInterface
-    {
-        $root = $this;
-
-        foreach ($this->getAncestors() as $ancestor) {
-            $root = $ancestor;
-        }
-
-        return $root;
-    }
-
     /**
      * @param \drupol\phptree\Node\AttributeNodeInterface $node
      *

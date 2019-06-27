@@ -95,36 +95,9 @@ class Directory extends Vfs implements DirectoryInterface
         return $found;
     }
 
-    public function getPath()
-    {
-        $paths = [
-            $this->getAttribute('id'),
-        ];
-
-        foreach ($this->getAncestors() as $ancestor) {
-            \array_unshift($paths, $ancestor->getAttribute('id'));
-        }
-
-        return Path::fromString(\str_replace('//', '/', \implode('/', $paths)));
-    }
-
     public function mkdir(string $id)
     {
         return $this->add(Directory::create($id));
-    }
-
-    /**
-     * @return \drupol\phpvfs\Node\DirectoryInterface
-     */
-    public function root(): DirectoryInterface
-    {
-        $root = $this;
-
-        foreach ($this->getAncestors() as $ancestor) {
-            $root = $ancestor;
-        }
-
-        return $root;
     }
 
     /**

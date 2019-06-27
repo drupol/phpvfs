@@ -6,6 +6,7 @@ namespace drupol\phpvfs\Node;
 
 use drupol\phptree\Node\AttributeNode;
 use drupol\phptree\Node\NodeInterface;
+use drupol\phpvfs\Utils\Path;
 
 /**
  * Class Vfs.
@@ -35,5 +36,35 @@ abstract class Vfs extends AttributeNode implements VfsInterface
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPath(): Path
+    {
+        $paths = [
+            $this->getAttribute('id'),
+        ];
+
+        foreach ($this->getAncestors() as $ancestor) {
+            \array_unshift($paths, $ancestor->getAttribute('id'));
+        }
+
+        return Path::fromString(\str_replace('//', '/', \implode('/', $paths)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function root(): DirectoryInterface
+    {
+        $root = $this;
+
+        foreach ($this->getAncestors() as $ancestor) {
+            $root = $ancestor;
+        }
+
+        return $root;
     }
 }
