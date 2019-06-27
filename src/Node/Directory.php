@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-use drupol\phptree\Node\AttributeNode;
 use drupol\phptree\Node\AttributeNodeInterface;
+use drupol\phpvfs\Utils\Path;
 
-class Directory extends AttributeNode
+class Directory extends VfsNode
 {
     /**
      * @param string $id
@@ -35,22 +35,19 @@ class Directory extends AttributeNode
      */
     public static function create(string $id, array $attributes = [])
     {
-        $absolute = false;
-        if (0 === \strpos($id, \DIRECTORY_SEPARATOR, 0)) {
-            $absolute = true;
-        }
+        $path = Path::fromString($id);
 
         if (\DIRECTORY_SEPARATOR !== $id && false !== \strpos($id, \DIRECTORY_SEPARATOR)) {
-            $paths = \array_filter(\explode(\DIRECTORY_SEPARATOR, $id));
-
-            if (true === $absolute) {
-                $paths = \array_merge([\DIRECTORY_SEPARATOR], $paths);
+            if ($path->isAbsolute()) {
+                $firstPart = DIRECTORY_SEPARATOR;
+            } else {
+                $firstPart = $path->shift();
             }
 
-            $return = $root = self::create(\array_shift($paths), $attributes);
+            $return = $root = self::create($firstPart, $attributes);
 
-            foreach ($paths as $path) {
-                $child = new self(['id' => $path]);
+            foreach ($path->getIterator() as $pathPart) {
+                $child = new self(['id' => $pathPart]);
                 $root->add($child);
                 $root = $child;
             }
@@ -58,7 +55,9 @@ class Directory extends AttributeNode
             return $return;
         }
 
-        return new self(['id' => $id]);
+        $attributes = ['id' => $id] + $attributes;
+
+        return new self($attributes);
     }
 
     /**
@@ -106,38 +105,12 @@ class Directory extends AttributeNode
             \array_unshift($paths, $ancestor->getAttribute('id'));
         }
 
-        return \str_replace('//', '/', \implode('/', $paths));
+        return Path::fromString(\str_replace('//', '/', \implode('/', $paths)));
     }
 
     public function mkdir(string $id)
     {
-        $cwd = $this;
-
-        if (0 === \strpos($id, \DIRECTORY_SEPARATOR, 0)) {
-            $cwd = $this->root();
-        }
-
-        if (\DIRECTORY_SEPARATOR !== $id && false !== \strpos($id, \DIRECTORY_SEPARATOR)) {
-            $paths = \array_values(\array_filter(\explode(\DIRECTORY_SEPARATOR, $id)));
-
-            if ([] !== $paths && false !== $child = $cwd->contains(Directory::create($paths[0]))) {
-                \array_shift($paths);
-
-                return $child->mkdir(\implode(\DIRECTORY_SEPARATOR, $paths));
-            }
-
-            foreach ($paths as $path) {
-                $child = new self(['id' => $path]);
-                $cwd->add($child);
-                $cwd = $child;
-            }
-
-            return $this;
-        }
-
-        $this->add(Directory::create($id));
-
-        return $this;
+        return $this->add(Directory::create($id));
     }
 
     public function root(): AttributeNodeInterface

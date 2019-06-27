@@ -4,10 +4,9 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-use drupol\phptree\Node\AttributeNode;
 use drupol\phptree\Node\AttributeNodeInterface;
 
-class File extends AttributeNode
+class File extends VfsNode
 {
     /**
      * @param string $id
