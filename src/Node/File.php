@@ -55,41 +55,6 @@ class File extends Vfs implements FileInterface
     }
 
     /**
-     * @param string $path
-     *
-     * @return bool
-     */
-    public function exists(string $path)
-    {
-        $paths = \array_filter(\explode('/', $path));
-        $pathItem = \reset($paths);
-        $found = false;
-
-        /** @var \drupol\phpvfs\Node\Directory $child */
-        foreach ($this->children() as $child) {
-            if (!($child instanceof Directory)) {
-                continue;
-            }
-
-            if (false === $this->contains($pathItem)) {
-                $found = false;
-
-                break;
-            }
-
-            if (1 === \count($paths)) {
-                return true;
-            }
-
-            \array_shift($paths);
-
-            return $found || $child->exists(\implode('/', $paths));
-        }
-
-        return $found;
-    }
-
-    /**
      * @param \drupol\phptree\Node\AttributeNodeInterface $node
      *
      * @return AttributeNodeInterface|bool
