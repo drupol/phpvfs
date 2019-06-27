@@ -31,7 +31,10 @@ class Filesystem implements FilesystemInterface
         string $id,
         array $attributes = []
     ) {
-        $attributes = ['id' => $id] + $attributes;
+        $attributes = [
+            'id' => $id,
+            'vfs' => $this,
+        ] + $attributes;
 
         $this->cwd = Directory::create($id, $attributes);
     }

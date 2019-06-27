@@ -9,10 +9,16 @@ use drupol\phpvfs\Node\File;
 
 class Touch
 {
+    /**
+     * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
+     * @param string $id
+     * @param null|string $content
+     * @param array $attributes
+     *
+     * @throws \Exception
+     */
     public static function exec(FilesystemInterface $vfs, string $id, string $content = null, array $attributes = [])
     {
-        $file = File::create($id, '');
-
-        $vfs->getCwd()->add($file);
+        $vfs->getCwd()->add(File::create($id, $content, $attributes));
     }
 }

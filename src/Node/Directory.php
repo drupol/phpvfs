@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-use drupol\phptree\Node\AttributeNodeInterface;
 use drupol\phpvfs\Utils\Path;
 
 class Directory extends Vfs implements DirectoryInterface
@@ -16,7 +15,7 @@ class Directory extends Vfs implements DirectoryInterface
      */
     public function containsAttributeId(string $id): ?VfsInterface
     {
-        /** @var \drupol\phptree\Node\AttributeNodeInterface $child */
+        /** @var \drupol\phpvfs\Node\VfsInterface $child */
         foreach ($this->children() as $child) {
             if ($child->getAttribute('id') === $id) {
                 return $child;
@@ -25,6 +24,7 @@ class Directory extends Vfs implements DirectoryInterface
 
         return null;
     }
+
     /**
      * @param string $id
      * @param array $attributes
@@ -70,22 +70,5 @@ class Directory extends Vfs implements DirectoryInterface
     public function mkdir(string $id)
     {
         return $this->add(self::create($id));
-    }
-
-    /**
-     * @param \drupol\phpvfs\Node\VfsInterface $node
-     *
-     * @return AttributeNodeInterface|bool
-     */
-    protected function contains(VfsInterface $node)
-    {
-        /** @var \drupol\phpvfs\Node\VfsInterface $child */
-        foreach ($this->children() as $child) {
-            if ($node->getAttribute('id') === $child->getAttribute('id')) {
-                return $child;
-            }
-        }
-
-        return false;
     }
 }

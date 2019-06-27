@@ -9,7 +9,13 @@ use drupol\phpvfs\Utils\Path;
 
 class Exist
 {
-    public static function exec(FilesystemInterface $vfs, string ...$ids)
+    /**
+     * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
+     * @param string ...$ids
+     *
+     * @return bool
+     */
+    public static function exec(FilesystemInterface $vfs, string ...$ids): bool
     {
         $exist = true;
 

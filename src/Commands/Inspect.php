@@ -9,6 +9,14 @@ use drupol\phpvfs\Utils\Path;
 
 class Inspect
 {
+    /**
+     * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
+     * @param string $id
+     *
+     * @throws \Exception
+     *
+     * @return string
+     */
     public static function exec(FilesystemInterface $vfs, string $id)
     {
         $path = Path::fromString($id);
