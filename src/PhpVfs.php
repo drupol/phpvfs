@@ -6,6 +6,7 @@ namespace drupol\phpvfs;
 
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\File;
+use drupol\phpvfs\Node\FileInterface;
 
 class PhpVfs
 {
@@ -14,7 +15,7 @@ class PhpVfs
     public $context;
 
     /**
-     * @var \drupol\phpvfs\Node\FileInterface
+     * @var null|\drupol\phpvfs\Node\FileInterface
      */
     private $currentFile;
 
@@ -49,12 +50,12 @@ class PhpVfs
     /**
      * @see http://php.net/streamwrapper.stream-close
      */
-    public function stream_close()
+    public function stream_close() // phpcs:ignore
     {
         $this->currentFile = null;
     }
 
-    public function stream_eof(): bool
+    public function stream_eof(): bool // phpcs:ignore
     {
         return true;
     }
@@ -66,18 +67,26 @@ class PhpVfs
      *
      * @return bool
      */
-    public function stream_open(string $resource)
+    public function stream_open(string $resource) // phpcs:ignore
     {
         $resource = $this->stripScheme($resource);
 
         if (true === $this->getVfs()->exist($resource)) {
-            $this->currentFile = $this->getVfs()->get($resource);
+            $file = $this->getVfs()->get($resource);
+
+            if ($file instanceof FileInterface) {
+                $this->currentFile = $file;
+            }
         } else {
             $this->currentFile = File::create($resource);
             $this->getVfs()->getCwd()->add($this->currentFile->root());
         }
 
-        $this->currentFile->position(0);
+        if (null === $this->currentFile) {
+            return false;
+        }
+
+        $this->currentFile->setPosition(0);
 
         return true;
     }
@@ -85,11 +94,17 @@ class PhpVfs
     /**
      * @see http://php.net/streamwrapper.stream-read
      *
+     * @param int $bytes
+     *
      * @return mixed
      */
-    public function stream_read(int $bytes)
+    public function stream_read(int $bytes) // phpcs:ignore
     {
-        return $this->currentFile->read($bytes);
+        if (null !== $this->currentFile) {
+            return $this->currentFile->read($bytes);
+        }
+
+        return false;
     }
 
     /**
@@ -97,9 +112,13 @@ class PhpVfs
      *
      * @return int
      */
-    public function stream_write(string $data)
+    public function stream_write(string $data) // phpcs:ignore
     {
-        return $this->currentFile->write($data);
+        if (null !== $this->currentFile) {
+            return $this->currentFile->write($data);
+        }
+
+        return 0;
     }
 
     /**
@@ -111,8 +130,6 @@ class PhpVfs
      */
     public function stripScheme($path): string
     {
-        $scheme = \explode('://', $path, 2);
-
-        return '/' . \ltrim(\end($scheme), '/');
+        return '/' . \ltrim(\substr($path, 0, 8), '/');
     }
 }

@@ -52,7 +52,7 @@ class Directory extends Vfs implements DirectoryInterface
                 $root = $child;
             }
 
-            return $child;
+            return $root;
         }
 
         $attributes = ['id' => $id] + $attributes;

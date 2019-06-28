@@ -76,7 +76,7 @@ abstract class Vfs extends AttributeNode implements VfsInterface
     /**
      * @param \drupol\phpvfs\Node\VfsInterface $node
      *
-     * @return bool|\drupol\phpvfs\Node\VfsInterface
+     * @return null|\drupol\phpvfs\Node\VfsInterface
      */
     protected function contains(VfsInterface $node): ?VfsInterface
     {
