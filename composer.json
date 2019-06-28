@@ -1,7 +1,7 @@
 {
     "name": "drupol/phpvfs",
     "type": "library",
-    "description": "An implementation of virtual file system in PHP.",
+    "description": "An implementation of virtual file system and its stream wrapper in PHP.",
     "keywords": [
         "virtual filesystem"
     ],
@@ -14,12 +14,11 @@
     ],
     "require": {
         "php": ">=7.1",
-        "drupol/phptree": "*@dev"
+        "drupol/phptree": "^2.4"
     },
     "require-dev": {
         "drupol/php-conventions": "^1",
         "drupol/phpspec-annotation": "^1",
-        "graphp/graphviz": "^0.2",
         "infection/infection": "^0.12",
         "leanphp/phpspec-code-coverage": "^4",
         "phpbench/phpbench": "^0.16",
@@ -47,15 +46,9 @@
         "psr-4": {
             "drupol\\phpvfs\\tests\\": "tests/src/",
             "drupol\\phpvfs\\benchmarks\\": "benchmarks/",
-            "spec\\drupol\\phpvfs\\": "spec/drupol/phptree/"
+            "spec\\drupol\\phpvfs\\": "spec/drupol/phpvfs/"
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "/home/pol/dev/git/phptree"
-        }
-    ],
     "scripts": {
         "apigen": "./vendor/bin/apigen generate src --destination build/docs",
         "bench": "./vendor/bin/phpbench run --report=aggregate --store --precision=3",
