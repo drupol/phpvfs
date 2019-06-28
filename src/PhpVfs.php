@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs;
 
+use drupol\phpvfs\Commands\Exist;
+use drupol\phpvfs\Commands\Get;
+use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\File;
 use drupol\phpvfs\Node\FileInterface;
@@ -12,6 +15,9 @@ class PhpVfs
 {
     public const SCHEME = 'phpvfs';
 
+    /**
+     * @var array
+     */
     public $context;
 
     /**
@@ -19,31 +25,31 @@ class PhpVfs
      */
     private $currentFile;
 
-    public function getVfs(): FilesystemInterface
+    /**
+     * @return \drupol\phpvfs\Filesystem\FilesystemInterface
+     */
+    public static function fs(): FilesystemInterface
     {
-        $options = \stream_context_get_options(\stream_context_get_default());
+        $options = \stream_context_get_options(
+            \stream_context_get_default()
+        );
 
-        return $options[static::SCHEME]['vfs'];
+        return $options[static::SCHEME]['filesystem'];
     }
 
     /**
-     * @param string $path
-     * @param int $mode
-     * @param int $options
-     *
-     * @throws \Exception
-     *
-     * @return bool
+     * @param \drupol\phpvfs\Filesystem\Filesystem $filesystem
+     * @param array $options
      */
-    public function mkdir(string $path, int $mode, int $options)
+    public static function register(Filesystem $filesystem, array $options = [])
     {
-        $this->getVfs()->getCwd()->mkdir($path);
+        $options = [
+            static::SCHEME => [
+                'filesystem' => $filesystem,
+            ] + $options,
+        ];
 
-        return true;
-    }
-
-    public static function register()
-    {
+        \stream_context_set_default($options);
         \stream_wrapper_register(self::SCHEME, __CLASS__);
     }
 
@@ -52,9 +58,18 @@ class PhpVfs
      */
     public function stream_close() // phpcs:ignore
     {
+        if (null !== $this->currentFile) {
+            $this->currentFile->setPosition(0);
+        }
+
         $this->currentFile = null;
     }
 
+    /**
+     * @return bool
+     *
+     * @see http://php.net/streamwrapper.stream-eof
+     */
     public function stream_eof(): bool // phpcs:ignore
     {
         return true;
@@ -71,15 +86,15 @@ class PhpVfs
     {
         $resource = $this->stripScheme($resource);
 
-        if (true === $this->getVfs()->exist($resource)) {
-            $file = $this->getVfs()->get($resource);
+        if (true === $this::fs()->exist($resource)) {
+            $file = $this::fs()->get($resource);
 
             if ($file instanceof FileInterface) {
                 $this->currentFile = $file;
             }
         } else {
             $this->currentFile = File::create($resource);
-            $this->getVfs()->getCwd()->add($this->currentFile->root());
+            $this::fs()->getCwd()->add($this->currentFile->root());
         }
 
         if (null === $this->currentFile) {
@@ -122,14 +137,32 @@ class PhpVfs
     }
 
     /**
+     * @param string $path
+     *
+     * @throws \Exception
+     */
+    public function unlink(string $path)
+    {
+        $path = $this->stripScheme($path);
+
+        if (true === Exist::exec($this::fs(), $path)) {
+            $file = Get::exec($this::fs(), $path);
+
+            if (null !== $parent = $file->getParent()) {
+                $parent->delete($file);
+            }
+        }
+    }
+
+    /**
      * Returns path stripped of url scheme (http://, ftp://, test:// etc.).
      *
      * @param string $path
      *
      * @return string
      */
-    public function stripScheme($path): string
+    protected function stripScheme(string $path): string
     {
-        return '/' . \ltrim(\substr($path, 0, 8), '/');
+        return '/' . \ltrim(\substr($path, 9), '/');
     }
 }
