@@ -39,10 +39,21 @@ class PhpVfsSpec extends ObjectBehavior
             ->read(8192)
             ->shouldReturn('bar');
 
-        \unlink('phpvfs://a/b/c/d/foo.txt');
+        \rename('phpvfs://a/b/c/d/foo.txt', 'phpvfs://d/e/f/g/bar.baz');
+
+        $this::fs()
+            ->get('/d/e/f/g/bar.baz')
+            ->read(8192)
+            ->shouldReturn('bar');
+
+        \unlink('phpvfs://d/e/f/g/bar.baz');
 
         $this::fs()
             ->exist('/a/b/c/d/foo.txt')
+            ->shouldReturn(false);
+
+        $this::fs()
+            ->exist('/d/e/f/g/bar.baz')
             ->shouldReturn(false);
     }
 

@@ -69,6 +69,8 @@ class Directory extends Vfs implements DirectoryInterface
      */
     public function mkdir(string $id)
     {
-        return $this->add(self::create($id));
+        $dir = self::create($id);
+
+        return $this->add($dir->root());
     }
 }

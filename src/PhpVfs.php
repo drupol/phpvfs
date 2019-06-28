@@ -4,12 +4,14 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs;
 
+use drupol\phpvfs\Commands\Cd;
 use drupol\phpvfs\Commands\Exist;
 use drupol\phpvfs\Commands\Get;
 use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\File;
 use drupol\phpvfs\Node\FileInterface;
+use drupol\phpvfs\Utils\Path;
 
 class PhpVfs
 {
@@ -51,6 +53,58 @@ class PhpVfs
 
         \stream_context_set_default($options);
         \stream_wrapper_register(self::SCHEME, __CLASS__);
+    }
+
+    /**
+     * @param string $from
+     * @param string $to
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    public function rename(string $from, string $to): bool
+    {
+        $from = $this->stripScheme($from);
+        $to = $this->stripScheme($to);
+
+        if (Exist::exec($this::fs(), $from)) {
+            $from = Get::exec($this::fs(), $from);
+        } else {
+            throw new \Exception('Source resource does not exist.');
+
+            return false;
+        }
+
+        if (Exist::exec($this::fs(), $to)) {
+            throw new \Exception('Destination already exist.');
+
+            return false;
+        }
+
+        $toPath = Path::fromString($to);
+
+        $this::fs()
+            ->getCwd()
+            ->mkdir($toPath->dirname());
+
+        if (null !== $parent = $from->getParent()) {
+            $parent->delete($from);
+        }
+
+        Cd::exec($this::fs(), $toPath->dirname());
+
+        $from->setAttribute('id', $toPath->basename());
+
+        if ($from instanceof FileInterface) {
+            $from->setPosition(0);
+        }
+
+        $this::fs()
+            ->getCwd()
+            ->add($from);
+
+        return true;
     }
 
     /**
