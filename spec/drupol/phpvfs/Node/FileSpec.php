@@ -67,6 +67,62 @@ class FileSpec extends ObjectBehavior
             ->count()
             ->shouldReturn(6);
     }
+
+    public function it_can_be_written()
+    {
+        $this->beConstructedThrough('create', ['/a/b/file.txt']);
+
+        $this
+            ->root()
+            ->count()
+            ->shouldReturn(3);
+
+        $this
+            ->getPosition()
+            ->shouldReturn(0);
+
+        $this
+            ->read(8192)
+            ->shouldReturn('');
+
+        $this
+            ->write('content')
+            ->shouldReturn(7);
+
+        $this
+            ->getPosition()
+            ->shouldReturn(7);
+
+        $this
+            ->atEof()
+            ->shouldReturn(true);
+
+        $this
+            ->setPosition(0)
+            ->atEof()
+            ->shouldReturn(false);
+
+        $this
+            ->seekToEnd()
+            ->getPosition()
+            ->shouldReturn(7);
+    }
+
+    public function it_get_its_path()
+    {
+        $this->beConstructedThrough('create', ['/a/b/file.txt']);
+
+        $this
+            ->getPath()
+            ->__toString()
+            ->shouldReturn('/a/b/file.txt');
+
+        $this
+            ->getPath()
+            ->isAbsolute()
+            ->shouldReturn(true);
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType(File::class);

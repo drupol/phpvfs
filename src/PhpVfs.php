@@ -68,18 +68,14 @@ class PhpVfs
         $from = $this->stripScheme($from);
         $to = $this->stripScheme($to);
 
-        if (Exist::exec($this::fs(), $from)) {
-            $from = Get::exec($this::fs(), $from);
-        } else {
+        if (!Exist::exec($this::fs(), $from)) {
             throw new \Exception('Source resource does not exist.');
-
-            return false;
         }
+
+        $from = Get::exec($this::fs(), $from);
 
         if (Exist::exec($this::fs(), $to)) {
             throw new \Exception('Destination already exist.');
-
-            return false;
         }
 
         $toPath = Path::fromString($to);
@@ -206,6 +202,14 @@ class PhpVfs
                 $parent->delete($file);
             }
         }
+    }
+
+    /**
+     * @todo
+     */
+    public static function unregister()
+    {
+        \stream_wrapper_unregister(self::SCHEME);
     }
 
     /**

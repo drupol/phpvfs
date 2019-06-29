@@ -16,9 +16,19 @@ class Touch
      * @param array $attributes
      *
      * @throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\File
      */
     public static function exec(FilesystemInterface $vfs, string $id, string $content = '', array $attributes = [])
     {
-        $vfs->getCwd()->add(File::create($id, $content, $attributes));
+        if (Exist::exec($vfs, $id)) {
+            throw new \Exception('File already exist.');
+        }
+
+        $file = File::create($id, $content, $attributes);
+
+        $vfs->getCwd()->add($file);
+
+        return $file;
     }
 }

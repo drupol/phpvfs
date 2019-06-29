@@ -97,7 +97,7 @@ class File extends Vfs implements FileInterface
      */
     public function seekToEnd()
     {
-        $this->setPosition(
+        return $this->setPosition(
             \strlen($this->getAttribute('content'))
         );
     }

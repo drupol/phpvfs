@@ -11,7 +11,6 @@ use drupol\phpvfs\Commands\Inspect;
 use drupol\phpvfs\Commands\Touch;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
-use drupol\phpvfs\Node\File;
 use drupol\phpvfs\Node\VfsInterface;
 
 class Filesystem implements FilesystemInterface
@@ -62,25 +61,9 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public static function directory(string $id, array $attributes = []): DirectoryInterface
-    {
-        return Directory::create($id, $attributes);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function exist(string $id): bool
     {
         return Exist::exec($this, $id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function file(string $id, string $content = '', array $attributes = []): File
-    {
-        return File::create($id, $content, $attributes);
     }
 
     /**

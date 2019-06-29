@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace spec\drupol\phpvfs;
 
 use drupol\phpvfs\Filesystem\Filesystem;
+use drupol\phpvfs\Node\Directory;
+use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\FileInterface;
 use drupol\phpvfs\Node\File;
 use drupol\phpvfs\PhpVfs;
@@ -12,6 +14,73 @@ use PhpSpec\ObjectBehavior;
 
 class PhpVfsSpec extends ObjectBehavior
 {
+    public function it_can_delete_a_file()
+    {
+        $vfs = new Filesystem('/');
+
+        $this::register($vfs);
+
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        \fwrite($file, 'bar');
+        \fclose($file);
+
+        \unlink('phpvfs://a/b/c/d/foo.txt');
+
+        $this::fs()
+            ->exist('/a/b/c/d/foo.txt')
+            ->shouldReturn(false);
+
+        $this::unregister();
+    }
+
+    public function it_can_do_stream_eof()
+    {
+        $this
+            ->stream_eof()
+            ->shouldReturn(true);
+    }
+
+    public function it_can_get_a_node()
+    {
+        $vfs = new Filesystem('/');
+
+        $this::register($vfs);
+
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        \fwrite($file, 'bar');
+        \fclose($file);
+
+        $this::fs()
+            ->get('/a/b/c/d/foo.txt')
+            ->shouldBeAnInstanceOf(FileInterface::class);
+
+        $this::fs()
+            ->get('/a/b/c/d')
+            ->shouldBeAnInstanceOf(DirectoryInterface::class);
+
+        $this::unregister();
+    }
+
+    public function it_can_inspect_a_node()
+    {
+        $vfs = new Filesystem('/');
+
+        $this::register($vfs);
+
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        \fwrite($file, 'bar');
+        \fclose($file);
+
+        $this::fs()
+            ->inspect('/a/b/c/d/foo.txt')
+            ->shouldReturn(File::class);
+
+        $this::fs()
+            ->inspect('/a/b/c/d')
+            ->shouldReturn(Directory::class);
+
+        $this::unregister();
+    }
     public function it_can_open_and_read_write_a_file()
     {
         $vfs = new Filesystem('/');
@@ -30,9 +99,22 @@ class PhpVfsSpec extends ObjectBehavior
             ->get('/a/b/c/d/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
 
-        $this::fs()
-            ->inspect('/a/b/c/d/foo.txt')
-            ->shouldReturn(File::class);
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        \fwrite($file, 'foo');
+        \fclose($file);
+
+        $this::unregister();
+    }
+
+    public function it_can_rename_a_file()
+    {
+        $vfs = new Filesystem('/');
+
+        $this::register($vfs);
+
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        \fwrite($file, 'bar');
+        \fclose($file);
 
         $this::fs()
             ->get('/a/b/c/d/foo.txt')
@@ -46,15 +128,15 @@ class PhpVfsSpec extends ObjectBehavior
             ->read(8192)
             ->shouldReturn('bar');
 
-        \unlink('phpvfs://d/e/f/g/bar.baz');
+        $this
+            ->shouldThrow(\Exception::class)
+            ->during('rename', ['phpvfs://foo.txt', 'phpvfs://d/e/f/g/bar.baz']);
 
-        $this::fs()
-            ->exist('/a/b/c/d/foo.txt')
-            ->shouldReturn(false);
+        $this
+            ->shouldThrow(\Exception::class)
+            ->during('rename', ['phpvfs://d/e/f/g/bar.baz', 'phpvfs://d/e/f/g/bar.baz']);
 
-        $this::fs()
-            ->exist('/d/e/f/g/bar.baz')
-            ->shouldReturn(false);
+        $this::unregister();
     }
 
     public function it_is_initializable()

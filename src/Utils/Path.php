@@ -94,7 +94,11 @@ class Path implements \IteratorAggregate
      */
     public function isValid()
     {
-        return \preg_match('/^[^*?"<>|:]*$/', \trim($this->__toString(), ' /'));
+        if (\preg_match('/^[^*?"<>|:]*$/', \trim($this->__toString(), ' /'))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
