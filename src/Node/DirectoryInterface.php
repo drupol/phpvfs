@@ -4,14 +4,14 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-interface DirectoryInterface extends VfsInterface
+interface DirectoryInterface extends FilesystemNodeInterface
 {
     /**
      * @param string $id
      *
-     * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\VfsInterface
+     * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    public function containsAttributeId(string $id): ?VfsInterface;
+    public function containsAttributeId(string $id): ?FilesystemNodeInterface;
 
     /**
      * @param string $name

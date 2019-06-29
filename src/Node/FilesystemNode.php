@@ -11,7 +11,7 @@ use drupol\phpvfs\Utils\Path;
 /**
  * Class Vfs.
  */
-abstract class Vfs extends AttributeNode implements VfsInterface
+abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInterface
 {
     /**
      * {@inheritdoc}
@@ -22,8 +22,12 @@ abstract class Vfs extends AttributeNode implements VfsInterface
      */
     public function add(NodeInterface ...$nodes): NodeInterface
     {
-        /** @var \drupol\phpvfs\Node\VfsInterface $node */
+        /** @var \drupol\phpvfs\Node\FilesystemNodeInterface $node */
         foreach ($nodes as $node) {
+            if (!($node instanceof FilesystemNodeInterface)) {
+                throw new \Exception('Invalid filesystem node type.');
+            }
+
             if ($this->getAttribute('id') === $node->getAttribute('id')) {
                 $this->add($node[0]->setParent(null));
 
@@ -62,7 +66,7 @@ abstract class Vfs extends AttributeNode implements VfsInterface
     /**
      * {@inheritdoc}
      */
-    public function root(): VfsInterface
+    public function root(): FilesystemNodeInterface
     {
         $root = $this;
 
@@ -74,13 +78,13 @@ abstract class Vfs extends AttributeNode implements VfsInterface
     }
 
     /**
-     * @param \drupol\phpvfs\Node\VfsInterface $node
+     * @param \drupol\phpvfs\Node\FilesystemNodeInterface $node
      *
-     * @return null|\drupol\phpvfs\Node\VfsInterface
+     * @return null|\drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    protected function contains(VfsInterface $node): ?VfsInterface
+    protected function contains(FilesystemNodeInterface $node): ?FilesystemNodeInterface
     {
-        /** @var \drupol\phpvfs\Node\VfsInterface $child */
+        /** @var \drupol\phpvfs\Node\FilesystemNodeInterface $child */
         foreach ($this->children() as $child) {
             if ($node->getAttribute('id') === $child->getAttribute('id')) {
                 return $child;

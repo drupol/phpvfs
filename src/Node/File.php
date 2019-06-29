@@ -6,7 +6,7 @@ namespace drupol\phpvfs\Node;
 
 use drupol\phpvfs\Utils\Path;
 
-class File extends Vfs implements FileInterface
+class File extends FilesystemNode implements FileInterface
 {
     /**
      * File constructor.

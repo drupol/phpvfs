@@ -11,7 +11,7 @@ use drupol\phpvfs\Commands\Inspect;
 use drupol\phpvfs\Commands\Touch;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
-use drupol\phpvfs\Node\VfsInterface;
+use drupol\phpvfs\Node\FilesystemNodeInterface;
 
 class Filesystem implements FilesystemInterface
 {
@@ -69,7 +69,7 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $id): ?VfsInterface
+    public function get(string $id): ?FilesystemNodeInterface
     {
         return Get::exec($this, $id);
     }
@@ -93,7 +93,7 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function root(): VfsInterface
+    public function root(): FilesystemNodeInterface
     {
         return $this->cwd->root();
     }

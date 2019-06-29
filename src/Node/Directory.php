@@ -6,16 +6,16 @@ namespace drupol\phpvfs\Node;
 
 use drupol\phpvfs\Utils\Path;
 
-class Directory extends Vfs implements DirectoryInterface
+class Directory extends FilesystemNode implements DirectoryInterface
 {
     /**
      * @param string $id
      *
-     * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\VfsInterface
+     * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    public function containsAttributeId(string $id): ?VfsInterface
+    public function containsAttributeId(string $id): ?FilesystemNodeInterface
     {
-        /** @var \drupol\phpvfs\Node\VfsInterface $child */
+        /** @var \drupol\phpvfs\Node\FilesystemNodeInterface $child */
         foreach ($this->children() as $child) {
             if ($child->getAttribute('id') === $id) {
                 return $child;

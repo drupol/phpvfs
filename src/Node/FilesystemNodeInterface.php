@@ -10,7 +10,7 @@ use drupol\phpvfs\Utils\Path;
 /**
  * Interface VfsInterface.
  */
-interface VfsInterface extends AttributeNodeInterface
+interface FilesystemNodeInterface extends AttributeNodeInterface
 {
     /**
      * @return \drupol\phpvfs\Utils\Path
@@ -18,7 +18,7 @@ interface VfsInterface extends AttributeNodeInterface
     public function getPath(): Path;
 
     /**
-     * @return \drupol\phpvfs\Node\VfsInterface
+     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    public function root(): VfsInterface;
+    public function root(): FilesystemNodeInterface;
 }

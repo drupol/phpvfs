@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace drupol\phpvfs\Commands;
 
 use drupol\phpvfs\Filesystem\FilesystemInterface;
-use drupol\phpvfs\Node\VfsInterface;
+use drupol\phpvfs\Node\FilesystemNodeInterface;
 use drupol\phpvfs\Utils\Path;
 
 class Get
@@ -14,11 +14,11 @@ class Get
      * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
      * @param string $id
      *
-     * @throws \Exception
+     *@throws \Exception
      *
-     * @return \drupol\phpvfs\Node\VfsInterface
+     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    public static function exec(FilesystemInterface $vfs, string $id): VfsInterface
+    public static function exec(FilesystemInterface $vfs, string $id): FilesystemNodeInterface
     {
         $path = Path::fromString($id);
 
