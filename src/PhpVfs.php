@@ -127,29 +127,51 @@ class PhpVfs
 
     /**
      * @param string $resource
+     * @param mixed $mode
+     * @param mixed $options
+     * @param mixed $openedPath
      *
      * @throws \Exception
      *
      * @return bool
      */
-    public function stream_open(string $resource) // phpcs:ignore
+    public function stream_open(string $resource, $mode, $options, &$openedPath) // phpcs:ignore
     {
+        $mode = \str_split(\str_replace('b', '', $mode));
+
+        $appendMode = \in_array('a', $mode, true);
+        $readMode = \in_array('r', $mode, true);
+        $writeMode = \in_array('w', $mode, true);
+        $extended = \in_array('+', $mode, true);
+
         $resource = $this->stripScheme($resource);
 
-        if (true === $this::fs()->exist($resource)) {
-            $file = $this::fs()->get($resource);
+        $resourcePath = Path::fromString($resource);
 
-            if ($file instanceof FileInterface) {
-                $this->currentFile = $file;
+        if (!Exist::exec($this::fs(), $resource)) {
+            if ($readMode || !Exist::exec($this::fs(), $resourcePath->dirname())) {
+                if ($options & STREAM_REPORT_ERRORS) {
+                    \trigger_error(\sprintf('%s: failed to open stream.', $resourcePath), E_USER_WARNING);
+                }
+
+                return false;
             }
-        } else {
+
             $this->currentFile = File::create($resource);
-            $this::fs()->getCwd()->add($this->currentFile->root());
+            $this::fs()
+                ->getCwd()
+                ->add($this->currentFile->root());
         }
 
-        if (null === $this->currentFile) {
+        if (null === $file = $this::fs()->get($resource)) {
             return false;
         }
+
+        if (!($file instanceof FileInterface)) {
+            return false;
+        }
+
+        $this->currentFile = $file;
 
         $this->currentFile->setPosition(0);
 

@@ -20,6 +20,11 @@ class PhpVfsSpec extends ObjectBehavior
 
         $this::register($vfs);
 
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
+
         $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
         \fwrite($file, 'bar');
         \fclose($file);
@@ -44,6 +49,11 @@ class PhpVfsSpec extends ObjectBehavior
     {
         $vfs = new Filesystem('/');
 
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
+
         $this::register($vfs);
 
         $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
@@ -65,6 +75,11 @@ class PhpVfsSpec extends ObjectBehavior
     {
         $vfs = new Filesystem('/');
 
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
+
         $this::register($vfs);
 
         $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
@@ -84,6 +99,11 @@ class PhpVfsSpec extends ObjectBehavior
     public function it_can_open_and_read_write_a_file()
     {
         $vfs = new Filesystem('/');
+
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
 
         $this::register($vfs);
 
@@ -109,6 +129,11 @@ class PhpVfsSpec extends ObjectBehavior
     public function it_can_rename_a_file()
     {
         $vfs = new Filesystem('/');
+
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
 
         $this::register($vfs);
 

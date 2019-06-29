@@ -7,7 +7,7 @@
  [![Mutation testing badge](https://badge.stryker-mutator.io/github.com/drupol/phpvfs/master)](https://stryker-mutator.github.io)
  [![License](https://img.shields.io/packagist/l/drupol/phpvfs.svg?style=flat-square)](https://packagist.org/packages/drupol/phpvfs)
 
-# PhpVfs
+# PHPVfs
 
 ## Description
 

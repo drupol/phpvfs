@@ -25,12 +25,12 @@ class Path implements \IteratorAggregate
 
     public function basename()
     {
-        return $this->getLastPart();
+        return \basename(($this->isAbsolute() ? '/' : '') . \implode('/', $this->getFragments()));
     }
 
     public function dirname()
     {
-        return ($this->isAbsolute() ? '/' : '') . \implode('/', \array_slice($this->getFragments(), 0, -1));
+        return \dirname(($this->isAbsolute() ? '/' : '') . \implode('/', $this->getFragments()));
     }
 
     /**

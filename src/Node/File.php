@@ -48,7 +48,7 @@ class File extends FilesystemNode implements FileInterface
         $dirname = $path->dirname();
 
         $basedir = null;
-        if (!empty($dirname)) {
+        if (!empty($dirname) && '.' !== $dirname) {
             $basedir = Directory::create($dirname);
         }
 
