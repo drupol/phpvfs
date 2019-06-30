@@ -14,6 +14,29 @@ use drupol\phpvfs\Utils\Path;
 abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInterface
 {
     /**
+     * FilesystemNode constructor.
+     *
+     * @param array $attributes
+     * @param null|int $capacity
+     */
+    public function __construct(
+        array $attributes = [],
+        ?int $capacity = 0
+    ) {
+        $time = \time();
+
+        $attributes = [
+            'uid' => \function_exists('posix_getuid') ? \posix_getuid() : 0,
+            'gid' => \function_exists('posix_getgid') ? \posix_getgid() : 0,
+            'atime' => $time,
+            'mtime' => $time,
+            'ctime' => $time,
+        ] + $attributes;
+
+        parent::__construct($attributes, $capacity);
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws \Exception
