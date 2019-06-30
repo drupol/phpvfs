@@ -168,11 +168,24 @@ class DirectorySpec extends ObjectBehavior
         $this->add($dirs);
 
         $this
+            ->count()
+            ->shouldReturn(3);
+
+        $this
             ->rmdir('f/g');
 
         $this
             ->containsAttributeId('f')
             ->shouldBeAnInstanceOf(DirectoryInterface::class);
+
+        $this
+            ->getPath()
+            ->__toString()
+            ->shouldReturn('/a/b/c/d/e');
+
+        $this
+            ->count()
+            ->shouldReturn(1);
 
         $this
             ->containsAttributeId('g')
