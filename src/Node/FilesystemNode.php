@@ -47,11 +47,11 @@ abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInt
     {
         /** @var \drupol\phpvfs\Node\FilesystemNodeInterface $node */
         foreach ($nodes as $node) {
-            $node = $node->root();
-
             if (!($node instanceof FilesystemNodeInterface)) {
                 throw new \Exception('Invalid filesystem node type.');
             }
+
+            $node = $node->root();
 
             if ($this->getAttribute('id') === $node->getAttribute('id')) {
                 $this->add($node[0]->setParent(null));
