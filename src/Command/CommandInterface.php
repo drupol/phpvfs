@@ -16,5 +16,5 @@ interface CommandInterface
      *
      * @return mixed
      */
-    public static function Exec(FilesystemInterface $filesystem);
+    public static function exec(FilesystemInterface $filesystem);
 }
