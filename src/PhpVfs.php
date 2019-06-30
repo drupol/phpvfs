@@ -23,11 +23,6 @@ class PhpVfs
     public $context;
 
     /**
-     * @var null|\drupol\phpvfs\Node\FileInterface
-     */
-    private $currentFile;
-
-    /**
      * @return \drupol\phpvfs\Filesystem\FilesystemInterface
      */
     public static function fs(): FilesystemInterface
@@ -48,6 +43,7 @@ class PhpVfs
         $options = [
             static::SCHEME => [
                 'filesystem' => $filesystem,
+                'currentFile' => null,
             ] + $options,
         ];
 
@@ -108,11 +104,11 @@ class PhpVfs
      */
     public function stream_close() // phpcs:ignore
     {
-        if (null !== $this->currentFile) {
-            $this->currentFile->setPosition(0);
+        if (null !== $file = $this->getCurrentFile()) {
+            $file->setPosition(0);
         }
 
-        $this->currentFile = null;
+        $this->setCurrentFile(null);
     }
 
     /**
@@ -157,10 +153,12 @@ class PhpVfs
                 return false;
             }
 
-            $this->currentFile = File::create($resource);
+            $file = File::create($resource);
+
+            $this->setCurrentFile($file);
             $this::fs()
                 ->getCwd()
-                ->add($this->currentFile->root());
+                ->add($file->root());
         }
 
         if (null === $file = $this::fs()->get($resource)) {
@@ -171,9 +169,9 @@ class PhpVfs
             return false;
         }
 
-        $this->currentFile = $file;
+        $file->setPosition(0);
 
-        $this->currentFile->setPosition(0);
+        $this->setCurrentFile($file);
 
         return true;
     }
@@ -187,8 +185,8 @@ class PhpVfs
      */
     public function stream_read(int $bytes) // phpcs:ignore
     {
-        if (null !== $this->currentFile) {
-            return $this->currentFile->read($bytes);
+        if (null !== $file = $this->getCurrentFile()) {
+            return $file->read($bytes);
         }
 
         return false;
@@ -199,11 +197,11 @@ class PhpVfs
      */
     public function stream_stat(): array // phpcs:ignore
     {
-        if (null === $this->currentFile) {
+        if (null === $file = $this->getCurrentFile()) {
             return [];
         }
 
-        return (array) $this->currentFile->getAttributes();
+        return (array) $file->getAttributes();
     }
 
     /**
@@ -213,8 +211,8 @@ class PhpVfs
      */
     public function stream_write(string $data) // phpcs:ignore
     {
-        if (null !== $this->currentFile) {
-            return $this->currentFile->write($data);
+        if (null !== $file = $this->getCurrentFile()) {
+            return $file->write($data);
         }
 
         return 0;
@@ -244,6 +242,32 @@ class PhpVfs
     public static function unregister()
     {
         \stream_wrapper_unregister(self::SCHEME);
+    }
+
+    /**
+     * @return null|FileInterface
+     */
+    protected function getCurrentFile(): ?FileInterface
+    {
+        $options = \stream_context_get_options(
+            \stream_context_get_default()
+        );
+
+        return $options[static::SCHEME]['currentFile'];
+    }
+
+    /**
+     * @param null|FileInterface $file
+     */
+    protected function setCurrentFile(?FileInterface $file)
+    {
+        $options = \stream_context_get_options(
+            \stream_context_get_default()
+        );
+
+        $options[static::SCHEME]['currentFile'] = $file;
+
+        \stream_context_set_default($options);
     }
 
     /**

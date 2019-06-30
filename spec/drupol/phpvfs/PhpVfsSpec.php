@@ -164,6 +164,34 @@ class PhpVfsSpec extends ObjectBehavior
         $this::unregister();
     }
 
+    public function it_can_use_stream_stat()
+    {
+        $vfs = new Filesystem('/');
+
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
+
+        $this::register($vfs);
+
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        \fwrite($fileHandler, 'bar');
+        \fclose($fileHandler);
+
+        $this
+            ->stream_stat()
+            ->shouldReturn([]);
+
+        // @wtf: If you remove $fileHandler, the test fails.
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $this
+            ->stream_stat()
+            ->shouldReturn((array) $file->getAttributes());
+
+        $this::unregister();
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType(PhpVfs::class);
