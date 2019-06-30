@@ -72,7 +72,8 @@ class FilesystemSpec extends ObjectBehavior
         $this->beConstructedWith('/a/b/c/d');
 
         $this
-            ->touch('foo.txt');
+            ->touch('foo.txt')
+            ->shouldReturn($this);
 
         $this
             ->get('/a/b/c/d/foo.txt')
@@ -118,5 +119,28 @@ class FilesystemSpec extends ObjectBehavior
         $this->beConstructedWith('/');
 
         $this->shouldHaveType(Filesystem::class);
+    }
+
+    public function it_can_set_and_get_its_cwd()
+    {
+        $this->beConstructedWith('/a/b/c/d');
+
+        $this
+            ->getCwd()
+            ->getAttribute('id')
+            ->shouldReturn('d');
+
+        $cwd = $this->getCwd();
+
+        $cwd = $cwd->getParent();
+
+        $this
+            ->setCwd($cwd)
+            ->shouldReturn($this);
+
+        $this
+            ->getCwd()
+            ->getAttribute('id')
+            ->shouldReturn('c');
     }
 }

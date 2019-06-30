@@ -102,7 +102,7 @@ class PhpVfs
     /**
      * @see http://php.net/streamwrapper.stream-close
      */
-    public function stream_close() // phpcs:ignore
+    public function stream_close(): void // phpcs:ignore
     {
         if (null !== $file = $this->getCurrentFile()) {
             $file->setPosition(0);
