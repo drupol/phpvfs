@@ -61,9 +61,6 @@ class PhpVfs
      */
     public function rename(string $from, string $to): bool
     {
-        $from = $this->stripScheme($from);
-        $to = $this->stripScheme($to);
-
         if (!Exist::exec($this::fs(), $from)) {
             throw new \Exception('Source resource does not exist.');
         }
@@ -139,8 +136,6 @@ class PhpVfs
         $readMode = \in_array('r', $mode, true);
         $writeMode = \in_array('w', $mode, true);
         $extended = \in_array('+', $mode, true);
-
-        $resource = $this->stripScheme($resource);
 
         $resourcePath = Path::fromString($resource);
 
@@ -225,8 +220,6 @@ class PhpVfs
      */
     public function unlink(string $path)
     {
-        $path = $this->stripScheme($path);
-
         if (true === Exist::exec($this::fs(), $path)) {
             $file = Get::exec($this::fs(), $path);
 
@@ -268,17 +261,5 @@ class PhpVfs
         $options[static::SCHEME]['currentFile'] = $file;
 
         \stream_context_set_default($options);
-    }
-
-    /**
-     * Returns path stripped of url scheme (http://, ftp://, test:// etc.).
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    protected function stripScheme(string $path): string
-    {
-        return '/' . \ltrim(\substr($path, 9), '/');
     }
 }
