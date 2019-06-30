@@ -20,25 +20,21 @@ class Get
      */
     public static function exec(FilesystemInterface $vfs, string $id): FilesystemNodeInterface
     {
+        if (!Exist::exec($vfs, $id)) {
+            throw new \Exception(\sprintf('Unknown path %s.', $id));
+        }
+
         $path = Path::fromString($id);
 
         /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
-        $cwd = $path->isAbsolute() ?
+        $child = $path->isAbsolute() ?
             $vfs->getCwd()->root() :
             $vfs->getCwd();
 
         foreach ($path->getIterator() as $pathPart) {
-            if (null !== $child = $cwd->containsAttributeId($pathPart)) {
-                $cwd = $child;
-            } else {
-                throw new \Exception('Unknown path.');
-            }
+            $child = $child->containsAttributeId($pathPart);
         }
 
-        if (null === $cwd) {
-            throw new \Exception('TODO');
-        }
-
-        return $cwd;
+        return $child;
     }
 }
