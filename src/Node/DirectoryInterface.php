@@ -23,6 +23,20 @@ interface DirectoryInterface extends FilesystemNodeInterface
     public function containsAttributeId(string $id): ?FilesystemNodeInterface;
 
     /**
+     * @param string ...$names
+     *
+     * @return bool
+     */
+    public function exist(string ...$names): bool;
+
+    /**
+     * @param string $name
+     *
+     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
+     */
+    public function get(string $name): FilesystemNodeInterface;
+
+    /**
      * @param string $name
      *
      * @return mixed

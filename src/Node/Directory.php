@@ -121,16 +121,18 @@ class Directory extends FilesystemNode implements DirectoryInterface
     /**
      * @param string $id
      *
-     * @throws \Exception
-     *
-     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
+     * @return \drupol\phpvfs\Node\DirectoryInterface
      */
-    public function get(string $id)
+    public function get(string $id): FilesystemNodeInterface
     {
+        if (!$this->exist($id)) {
+            throw new \Exception(\sprintf('Unable to get %s', $id));
+        }
+
         $path = Path::fromString($id);
 
-        if ($path->isRoot()) {
-            return $this->root();
+        if ((($root = $this->root()) instanceof DirectoryInterface) && $path->isRoot()) {
+            return $root;
         }
 
         /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
@@ -140,6 +142,10 @@ class Directory extends FilesystemNode implements DirectoryInterface
 
         foreach ($path->getIterator() as $pathPart) {
             $cwd = $cwd->containsAttributeId($pathPart);
+        }
+
+        if (null === $cwd) {
+            \xdebug_break();
         }
 
         return $cwd;

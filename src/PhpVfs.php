@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs;
 
-use drupol\phpvfs\Command\Cd;
-use drupol\phpvfs\Command\Exist;
-use drupol\phpvfs\Command\Get;
 use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\File;
@@ -103,13 +100,13 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function rename(string $from, string $to): bool
     {
-        if (!Exist::exec($this::fs(), $from)) {
+        if (!$this::fs()->getCwd()->exist($from)) {
             throw new \Exception('Source resource does not exist.');
         }
 
-        $from = Get::exec($this::fs(), $from);
+        $from = $this::fs()->getCwd()->get($from);
 
-        if (Exist::exec($this::fs(), $to)) {
+        if ($this::fs()->getCwd()->exist($to)) {
             throw new \Exception('Destination already exist.');
         }
 
@@ -123,7 +120,7 @@ class PhpVfs implements StreamWrapperInterface
             $parent->delete($from);
         }
 
-        Cd::exec($this::fs(), $toPath->dirname());
+        $directory = $this::fs()->getCwd()->cd($toPath->dirname());
 
         $from->setAttribute('id', $toPath->basename());
 
@@ -131,8 +128,7 @@ class PhpVfs implements StreamWrapperInterface
             $from->setPosition(0);
         }
 
-        $this::fs()
-            ->getCwd()
+        $directory
             ->add($from);
 
         return true;
@@ -208,8 +204,8 @@ class PhpVfs implements StreamWrapperInterface
 
         $resourcePath = Path::fromString($resource);
 
-        if (!Exist::exec($this::fs(), $resource)) {
-            if ($readMode || !Exist::exec($this::fs(), $resourcePath->dirname())) {
+        if (!$this::fs()->getCwd()->exist($resource)) {
+            if ($readMode || !$this::fs()->getCwd()->exist($resourcePath->dirname())) {
                 if ($options & STREAM_REPORT_ERRORS) {
                     \trigger_error(\sprintf('%s: failed to open stream.', $resourcePath), E_USER_WARNING);
                 }
@@ -225,9 +221,7 @@ class PhpVfs implements StreamWrapperInterface
                 ->add($file->root());
         }
 
-        if (null === $file = $this::fs()->get($resource)) {
-            return false;
-        }
+        $file = $this::fs()->getCwd()->get($resource);
 
         if (!($file instanceof FileInterface)) {
             return false;
@@ -305,8 +299,8 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function unlink(string $path): bool
     {
-        if (true === Exist::exec($this::fs(), $path)) {
-            $file = Get::exec($this::fs(), $path);
+        if (true === $this::fs()->getCwd()->exist($path)) {
+            $file = $this::fs()->getCwd()->get($path);
 
             if (null !== $parent = $file->getParent()) {
                 $parent->delete($file);

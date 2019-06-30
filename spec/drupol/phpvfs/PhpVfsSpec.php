@@ -31,6 +31,7 @@ class PhpVfsSpec extends ObjectBehavior
         \unlink('phpvfs://a/b/c/d/foo.txt');
 
         $this::fs()
+            ->getCwd()
             ->exist('/a/b/c/d/foo.txt')
             ->shouldReturn(false);
 
@@ -60,10 +61,12 @@ class PhpVfsSpec extends ObjectBehavior
         \fclose($file);
 
         $this::fs()
+            ->getCwd()
             ->get('/a/b/c/d/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
 
         $this::fs()
+            ->getCwd()
             ->get('/a/b/c/d')
             ->shouldBeAnInstanceOf(DirectoryInterface::class);
 
@@ -86,10 +89,12 @@ class PhpVfsSpec extends ObjectBehavior
         \fclose($file);
 
         $this::fs()
+            ->getCwd()
             ->exist('/a/b/c/d/foo.txt')
             ->shouldReturn(true);
 
         $this::fs()
+            ->getCwd()
             ->get('/a/b/c/d/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
 
@@ -116,6 +121,7 @@ class PhpVfsSpec extends ObjectBehavior
         \fclose($file);
 
         $this::fs()
+            ->getCwd()
             ->get('/a/b/c/d/foo.txt')
             ->read(8192)
             ->shouldReturn('bar');
@@ -123,6 +129,7 @@ class PhpVfsSpec extends ObjectBehavior
         \rename('phpvfs://a/b/c/d/foo.txt', 'phpvfs://d/e/f/g/bar.baz');
 
         $this::fs()
+            ->getCwd()
             ->get('/d/e/f/g/bar.baz')
             ->read(8192)
             ->shouldReturn('bar');

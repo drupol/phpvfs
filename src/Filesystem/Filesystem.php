@@ -4,10 +4,6 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Filesystem;
 
-use drupol\phpvfs\Command\Cd;
-use drupol\phpvfs\Command\Exist;
-use drupol\phpvfs\Command\Get;
-use drupol\phpvfs\Command\Touch;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\FilesystemNodeInterface;
@@ -45,35 +41,9 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function cd(string $id)
-    {
-        Cd::exec($this, $id);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function create(string $id, array $attributes = [])
     {
         return new self($id, $attributes);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function exist(string $id): bool
-    {
-        return Exist::exec($this, $id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(string $id): ?FilesystemNodeInterface
-    {
-        return Get::exec($this, $id);
     }
 
     /**
@@ -98,16 +68,6 @@ class Filesystem implements FilesystemInterface
     public function setCwd(DirectoryInterface $dir)
     {
         $this->cwd = $dir;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function touch(string $id)
-    {
-        Touch::exec($this, $id);
 
         return $this;
     }
