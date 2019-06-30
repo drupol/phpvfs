@@ -195,6 +195,18 @@ class PhpVfs
     }
 
     /**
+     * @return array
+     */
+    public function stream_stat(): array // phpcs:ignore
+    {
+        if (null === $this->currentFile) {
+            return [];
+        }
+
+        return (array) $this->currentFile->getAttributes();
+    }
+
+    /**
      * @param string $data
      *
      * @return int
