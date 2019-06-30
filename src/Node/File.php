@@ -71,7 +71,7 @@ class File extends FilesystemNode implements FileInterface
      */
     public function getPosition(): int
     {
-        return (int) $this->getAttribute('position');
+        return $this->getAttribute('position');
     }
 
     /**
