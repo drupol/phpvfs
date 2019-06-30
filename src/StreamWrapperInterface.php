@@ -51,9 +51,14 @@ interface StreamWrapperInterface
 
     /**
      * @param string $path
+     *   The directory URL which should be removed.
      * @param int $options
+     *   A bitwise mask of values, such as STREAM_MKDIR_RECURSIVE.
      *
      * @return bool
+     *   Returns TRUE on success or FALSE on failure.
+     *
+     * @see http://php.net/streamwrapper.rmdir
      */
     public function rmdir(string $path, int $options): bool;
 

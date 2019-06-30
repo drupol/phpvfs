@@ -143,7 +143,9 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function rmdir(string $path, int $options): bool
     {
-        throw new \Exception('Not implemented yet.');
+        $this::fs()
+            ->getCwd()
+            ->rmdir($path);
     }
 
     /**

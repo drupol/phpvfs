@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
+use drupol\phpvfs\Exporter\AttributeAscii;
 use drupol\phpvfs\Utils\Path;
 
 /**
@@ -75,5 +76,112 @@ class Directory extends FilesystemNode implements DirectoryInterface
         $dir = self::create($id);
 
         return $this->add($dir->root());
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public function rmdir(string $id)
+    {
+        if (!$this->exist($id)) {
+            throw new \Exception(sprintf('Cannot remove %s: No such file or directory.', $id));
+        }
+
+        $path = Path::fromString($id);
+
+        if ($path->isRoot()) {
+            throw new \Exception(sprintf('Cannot remove root directory.'));
+        }
+
+        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
+        $cwd = $path->isAbsolute() ?
+            $this->root() :
+            $this;
+
+        $last = $path->getLastPart();
+
+        foreach ($cwd->all() as $child) {
+            if (!($child instanceof DirectoryInterface)) {
+                continue;
+            }
+
+            if ($child->getAttribute('id') !== $last) {
+                continue;
+            }
+
+            $cwd = $child->getParent();
+            $cwd->remove($child);
+        }
+
+        return $cwd;
+    }
+
+    /**
+     * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
+     * @param string $id
+     *
+     *@throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
+     */
+    public function get(string $id)
+    {
+        $path = Path::fromString($id);
+
+        if ($path->isRoot()) {
+            return $this->root();
+        }
+
+        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
+        $child = $path->isAbsolute() ?
+            $this->root() :
+            $this;
+
+        foreach ($path->getIterator() as $pathPart) {
+            $child = $child->containsAttributeId($pathPart);
+        }
+
+        return $child;
+    }
+
+    /**
+     * @param string ...$ids
+     *
+     * @return bool
+     */
+    public function exist(string ...$ids): bool
+    {
+        $exist = true;
+        $existId = true;
+
+        foreach ($ids as $id) {
+            $path = Path::fromString($id);
+
+            /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
+            $cwd = $path->isAbsolute() ?
+                $this->root() :
+                $this;
+
+            foreach ($path->getIterator() as $pathPart) {
+                $pathPartExist = false;
+
+                if (\DIRECTORY_SEPARATOR === $pathPart) {
+                    $pathPartExist = true;
+                } elseif (null !== $child = $cwd->containsAttributeId($pathPart)) {
+                    $pathPartExist = true;
+                    $cwd = $child;
+                }
+
+                $existId = $existId && $pathPartExist;
+            }
+
+            $exist = $exist && $existId;
+        }
+
+        return $exist;
     }
 }

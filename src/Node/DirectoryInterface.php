@@ -22,4 +22,11 @@ interface DirectoryInterface extends FilesystemNodeInterface
      * @return mixed
      */
     public function mkdir(string $name);
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function rmdir(string $name);
 }
