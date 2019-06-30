@@ -41,7 +41,7 @@ $vfs = new Filesystem('/');
 PhpVfs::register($vfs);
 
 // Open a file handler for writing.
-$file = \fopen('phpvfs://a/b/c/foo.txt', 'w');
+$file = \fopen('phpvfs://foo.txt', 'w');
 
 // Write something.
 \fwrite($file, 'bar');
@@ -49,8 +49,19 @@ $file = \fopen('phpvfs://a/b/c/foo.txt', 'w');
 // Close the file handler.
 \fclose($file);
 
-$exporter = new AttributeAscii();
-echo $exporter->export($vfs->root());
+// Create a directory.
+$vfs
+  ->getCwd()
+  ->mkdir('/a/b/c');
+
+// Move the file.
+rename('phpvfs://foo.txt', 'phpvfs://a/b/c/bar.txt');
+
+// Get the content of the file.
+file_get_contents('phpvfs://a/b/c/bar.txt'); // returns 'bar'
+
+// Export the filesystem into an ascii tree.
+echo (new AttributeAscii())->export($vfs->root());
 ```
 
 ## Code quality, tests and benchmarks
