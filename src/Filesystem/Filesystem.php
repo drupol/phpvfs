@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Filesystem;
 
-use drupol\phpvfs\Commands\Cd;
-use drupol\phpvfs\Commands\Exist;
-use drupol\phpvfs\Commands\Get;
-use drupol\phpvfs\Commands\Inspect;
-use drupol\phpvfs\Commands\Touch;
+use drupol\phpvfs\Command\Cd;
+use drupol\phpvfs\Command\Exist;
+use drupol\phpvfs\Command\Get;
+use drupol\phpvfs\Command\Inspect;
+use drupol\phpvfs\Command\Touch;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\FilesystemNodeInterface;

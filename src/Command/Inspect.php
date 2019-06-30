@@ -2,13 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace drupol\phpvfs\Commands;
+namespace drupol\phpvfs\Command;
 
 use drupol\phpvfs\Filesystem\FilesystemInterface;
-use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Utils\Path;
 
-class Cd
+class Inspect
 {
     /**
      * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
@@ -16,9 +15,9 @@ class Cd
      *
      * @throws \Exception
      *
-     * @return \drupol\phpvfs\Node\DirectoryInterface
+     * @return string
      */
-    public static function exec(FilesystemInterface $vfs, string $id): DirectoryInterface
+    public static function exec(FilesystemInterface $vfs, string $id)
     {
         $path = Path::fromString($id);
 
@@ -27,22 +26,18 @@ class Cd
             $vfs->getCwd()->root() :
             $vfs->getCwd();
 
-        if ($path->isRoot()) {
-            $vfs->setCwd($cwd);
-
-            return $cwd;
-        }
-
         foreach ($path->getIterator() as $pathPart) {
             if (null !== $child = $cwd->containsAttributeId($pathPart)) {
                 $cwd = $child;
             } else {
-                throw new \Exception('Unknown directory.');
+                throw new \Exception('Unknown path.');
             }
         }
 
-        $vfs->setCwd($cwd);
+        if (null === $cwd) {
+            throw new \Exception('TODO');
+        }
 
-        return $cwd;
+        return \get_class($cwd);
     }
 }

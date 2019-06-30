@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace drupol\phpvfs\Commands;
+namespace drupol\phpvfs\Command;
 
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\FilesystemNodeInterface;

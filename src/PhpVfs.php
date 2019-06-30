@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs;
 
-use drupol\phpvfs\Commands\Cd;
-use drupol\phpvfs\Commands\Exist;
-use drupol\phpvfs\Commands\Get;
+use drupol\phpvfs\Command\Cd;
+use drupol\phpvfs\Command\Exist;
+use drupol\phpvfs\Command\Get;
 use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\File;

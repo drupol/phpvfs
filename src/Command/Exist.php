@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace drupol\phpvfs\Commands;
+namespace drupol\phpvfs\Command;
 
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Utils\Path;
 
-class Exist
+class Exist implements CommandInterface
 {
     /**
      * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
@@ -18,9 +18,9 @@ class Exist
     public static function exec(FilesystemInterface $vfs, string ...$ids): bool
     {
         $exist = true;
+        $existId = true;
 
         foreach ($ids as $id) {
-            $existId = true;
             $path = Path::fromString($id);
 
             /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
@@ -28,20 +28,21 @@ class Exist
                 $vfs->getCwd()->root() :
                 $vfs->getCwd();
 
+            $pathPartExist = false;
             foreach ($path->getIterator() as $pathPart) {
                 if (\DIRECTORY_SEPARATOR === $pathPart) {
-                    $existId = true;
+                    $pathPartExist = true;
                 } elseif (null !== $child = $cwd->containsAttributeId($pathPart)) {
-                    $existId = true;
+                    $pathPartExist = true;
                     $cwd = $child;
-                } else {
-                    $existId = false;
                 }
+
+                $existId = $existId && $pathPartExist;
             }
 
-            $exist = $exist && $existId;
+            $existId = $exist && $existId;
         }
 
-        return $exist;
+        return $existId;
     }
 }
