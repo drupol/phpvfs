@@ -139,9 +139,14 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function rmdir(string $path, int $options): bool
     {
-        $this::fs()
+        $cwd = $this::fs()
             ->getCwd()
             ->rmdir($path);
+
+        $this::fs()
+            ->setCwd($cwd);
+
+        return true;
     }
 
     /**

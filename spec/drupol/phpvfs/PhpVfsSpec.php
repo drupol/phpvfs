@@ -173,6 +173,28 @@ class PhpVfsSpec extends ObjectBehavior
         $this::unregister();
     }
 
+    public function it_is_able_to_remove_directory()
+    {
+        $vfs = new Filesystem('/');
+
+        $file = File::create('/a/b/c/d/foo.txt');
+        $vfs
+            ->getCwd()
+            ->add($file);
+
+        $this::register($vfs);
+
+        \rmdir('phpvfs://a/b/c/d');
+
+        $this::fs()
+            ->getCwd()
+            ->getPath()
+            ->__toString()
+            ->shouldBe('/a/b/c');
+
+        $this::unregister();
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType(PhpVfs::class);
