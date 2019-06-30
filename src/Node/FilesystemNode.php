@@ -61,7 +61,9 @@ abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInt
 
             // If the $cwd contains the nodechild.
             if (null !== $child = $this->contains($node)) {
-                $child->add($node[0]->setParent(null));
+                if (0 !== $node->degree()) {
+                    $child->add($node[0]->setParent(null));
+                }
 
                 continue;
             }
