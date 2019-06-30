@@ -36,9 +36,11 @@ class Cd
         foreach ($path->getIterator() as $pathPart) {
             if (null !== $child = $cwd->containsAttributeId($pathPart)) {
                 $cwd = $child;
-            } else {
-                throw new \Exception('Unknown directory.');
+
+                continue;
             }
+
+            throw new \Exception('Unknown directory.');
         }
 
         $vfs->setCwd($cwd);

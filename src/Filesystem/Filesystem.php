@@ -7,7 +7,6 @@ namespace drupol\phpvfs\Filesystem;
 use drupol\phpvfs\Command\Cd;
 use drupol\phpvfs\Command\Exist;
 use drupol\phpvfs\Command\Get;
-use drupol\phpvfs\Command\Inspect;
 use drupol\phpvfs\Command\Touch;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
@@ -80,14 +79,6 @@ class Filesystem implements FilesystemInterface
     public function getCwd(): DirectoryInterface
     {
         return $this->cwd;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function inspect(string $id): string
-    {
-        return Inspect::exec($this, $id);
     }
 
     /**

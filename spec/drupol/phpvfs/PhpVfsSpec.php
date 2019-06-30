@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace spec\drupol\phpvfs;
 
 use drupol\phpvfs\Filesystem\Filesystem;
-use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\FileInterface;
 use drupol\phpvfs\Node\File;
@@ -71,31 +70,6 @@ class PhpVfsSpec extends ObjectBehavior
         $this::unregister();
     }
 
-    public function it_can_inspect_a_node()
-    {
-        $vfs = new Filesystem('/');
-
-        $file = File::create('/a/b/c/d/foo.txt');
-        $vfs
-            ->getCwd()
-            ->add($file);
-
-        $this::register($vfs);
-
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
-        \fwrite($file, 'bar');
-        \fclose($file);
-
-        $this::fs()
-            ->inspect('/a/b/c/d/foo.txt')
-            ->shouldReturn(File::class);
-
-        $this::fs()
-            ->inspect('/a/b/c/d')
-            ->shouldReturn(Directory::class);
-
-        $this::unregister();
-    }
     public function it_can_open_and_read_write_a_file()
     {
         $vfs = new Filesystem('/');
