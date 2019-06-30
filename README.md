@@ -64,6 +64,13 @@ file_get_contents('phpvfs://a/b/c/bar.txt'); // returns 'bar'
 echo (new AttributeAscii())->export($vfs->root());
 ```
 
+## Objects
+
+The current filesystem objects are
+* **Filesystem**: A filesystem can contains directories and files
+* **Directory**: A directory can contains directories and files.
+* **File**: A file cannot contains anything.
+
 ## Code quality, tests and benchmarks
 
 Every time changes are introduced into the library, [Travis CI](https://travis-ci.org/drupol/phpvfs/builds) run the tests and the benchmarks.
