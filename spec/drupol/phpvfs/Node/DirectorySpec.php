@@ -58,29 +58,8 @@ class DirectorySpec extends ObjectBehavior
             ->during('add', [$differentNodeTypeNotExtendingVfs]);
     }
 
-    public function it_is_initializable()
+    public function it_can_change_directory()
     {
-        $this->shouldHaveType(Directory::class);
-    }
-
-    public function it_can_remove_directory_absolute()
-    {
-        $this->beConstructedThrough('create', ['/a/b/c/d/e']);
-
-        $this
-            ->rmdir('/a/b/c/d/e');
-
-        $this
-            ->root()
-            ->getAttribute('id')
-            ->shouldReturn('/');
-
-        $this
-            ->count()
-            ->shouldReturn(0);
-    }
-
-    public function it_can_remove_directory_relative() {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
         $dirs = Directory::create('f/g/h');
@@ -88,37 +67,31 @@ class DirectorySpec extends ObjectBehavior
         $this->add($dirs);
 
         $this
-            ->rmdir('f/g');
+            ->getPath()
+            ->__toString()
+            ->shouldBe('/a/b/c/d/e');
 
         $this
-            ->containsAttributeId('f')
-            ->shouldBeAnInstanceOf(DirectoryInterface::class);
+            ->cd('f/g')
+            ->getPath()
+            ->__toString()
+            ->shouldBe('/a/b/c/d/e/f/g');
 
         $this
-            ->containsAttributeId('g')
-            ->shouldBeNull();
+            ->cd('/a/b')
+            ->getPath()
+            ->__toString()
+            ->shouldBe('/a/b');
+
+        $this
+            ->cd('/')
+            ->getPath()
+            ->__toString()
+            ->shouldBe('//');
     }
 
-    public function it_can_remove_directory_containing_files() {
-        $this->beConstructedThrough('create', ['/a/b/c/d/e']);
-
-        $files = [
-            File::create('foo.txt'),
-            File::create('bar.txt'),
-            File::create('baz.txt'),
-        ];
-
-        $this->add(...$files);
-
-        $this
-            ->rmdir('foo.txt');
-
-        $this
-            ->containsAttributeId('foo.txt')
-            ->shouldBeAnInstanceOf(FileInterface::class);
-    }
-
-    public function it_can_get_a_subdirectory() {
+    public function it_can_get_a_subdirectory()
+    {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
         $this
@@ -147,5 +120,67 @@ class DirectorySpec extends ObjectBehavior
         $this
             ->get('/a/b/c/d/e/f/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
+    }
+
+    public function it_can_remove_directory_absolute()
+    {
+        $this->beConstructedThrough('create', ['/a/b/c/d/e']);
+
+        $this
+            ->rmdir('/a/b/c/d/e');
+
+        $this
+            ->root()
+            ->getAttribute('id')
+            ->shouldReturn('/');
+
+        $this
+            ->count()
+            ->shouldReturn(0);
+    }
+
+    public function it_can_remove_directory_containing_files()
+    {
+        $this->beConstructedThrough('create', ['/a/b/c/d/e']);
+
+        $files = [
+            File::create('foo.txt'),
+            File::create('bar.txt'),
+            File::create('baz.txt'),
+        ];
+
+        $this->add(...$files);
+
+        $this
+            ->rmdir('foo.txt');
+
+        $this
+            ->containsAttributeId('foo.txt')
+            ->shouldBeAnInstanceOf(FileInterface::class);
+    }
+
+    public function it_can_remove_directory_relative()
+    {
+        $this->beConstructedThrough('create', ['/a/b/c/d/e']);
+
+        $dirs = Directory::create('f/g/h');
+
+        $this->add($dirs);
+
+        $this
+            ->rmdir('f/g');
+
+        $this
+            ->containsAttributeId('f')
+            ->shouldBeAnInstanceOf(DirectoryInterface::class);
+
+        $this
+            ->containsAttributeId('g')
+            ->shouldBeNull();
+    }
+
+    public function it_is_initializable()
+    {
+        $this->shouldHaveType(Directory::class);
     }
 }

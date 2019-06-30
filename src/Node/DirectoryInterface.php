@@ -10,6 +10,12 @@ namespace drupol\phpvfs\Node;
 interface DirectoryInterface extends FilesystemNodeInterface
 {
     /**
+     * @param string $name
+     *
+     * @return \drupol\phpvfs\Node\DirectoryInterface
+     */
+    public function cd(string $name): DirectoryInterface;
+    /**
      * @param string $id
      *
      * @return null|\drupol\phpvfs\Node\DirectoryInterface|\drupol\phpvfs\Node\FileInterface|\drupol\phpvfs\Node\FilesystemNodeInterface
@@ -26,7 +32,7 @@ interface DirectoryInterface extends FilesystemNodeInterface
     /**
      * @param string $name
      *
-     * @return mixed
+     * @return \drupol\phpvfs\Node\DirectoryInterface
      */
-    public function rmdir(string $name);
+    public function rmdir(string $name): DirectoryInterface;
 }

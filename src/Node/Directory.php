@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
-use drupol\phpvfs\Exporter\AttributeAscii;
 use drupol\phpvfs\Utils\Path;
 
 /**
@@ -12,6 +11,24 @@ use drupol\phpvfs\Utils\Path;
  */
 class Directory extends FilesystemNode implements DirectoryInterface
 {
+    /**
+     * @param string $id
+     *
+     * @throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\DirectoryInterface
+     */
+    public function cd(string $id): DirectoryInterface
+    {
+        if (!$this->exist($id)) {
+            throw new \Exception(\sprintf('Cannot change directory to %s: No such file or directory.', $id));
+        }
+
+        if (($cwd = $this->get($id)) instanceof DirectoryInterface) {
+            return $cwd;
+        }
+    }
+
     /**
      * @param string $id
      *
@@ -65,90 +82,6 @@ class Directory extends FilesystemNode implements DirectoryInterface
     }
 
     /**
-     * @param string $id
-     *
-     * @throws \Exception
-     *
-     * @return \drupol\phptree\Node\NodeInterface|\drupol\phpvfs\Node\DirectoryInterface
-     */
-    public function mkdir(string $id)
-    {
-        $dir = self::create($id);
-
-        return $this->add($dir->root());
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return bool
-     *
-     * @throws \Exception
-     */
-    public function rmdir(string $id)
-    {
-        if (!$this->exist($id)) {
-            throw new \Exception(sprintf('Cannot remove %s: No such file or directory.', $id));
-        }
-
-        $path = Path::fromString($id);
-
-        if ($path->isRoot()) {
-            throw new \Exception(sprintf('Cannot remove root directory.'));
-        }
-
-        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
-        $cwd = $path->isAbsolute() ?
-            $this->root() :
-            $this;
-
-        $last = $path->getLastPart();
-
-        foreach ($cwd->all() as $child) {
-            if (!($child instanceof DirectoryInterface)) {
-                continue;
-            }
-
-            if ($child->getAttribute('id') !== $last) {
-                continue;
-            }
-
-            $cwd = $child->getParent();
-            $cwd->remove($child);
-        }
-
-        return $cwd;
-    }
-
-    /**
-     * @param \drupol\phpvfs\Filesystem\FilesystemInterface $vfs
-     * @param string $id
-     *
-     *@throws \Exception
-     *
-     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
-     */
-    public function get(string $id)
-    {
-        $path = Path::fromString($id);
-
-        if ($path->isRoot()) {
-            return $this->root();
-        }
-
-        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
-        $child = $path->isAbsolute() ?
-            $this->root() :
-            $this;
-
-        foreach ($path->getIterator() as $pathPart) {
-            $child = $child->containsAttributeId($pathPart);
-        }
-
-        return $child;
-    }
-
-    /**
      * @param string ...$ids
      *
      * @return bool
@@ -183,5 +116,91 @@ class Directory extends FilesystemNode implements DirectoryInterface
         }
 
         return $exist;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
+     */
+    public function get(string $id)
+    {
+        $path = Path::fromString($id);
+
+        if ($path->isRoot()) {
+            return $this->root();
+        }
+
+        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
+        $cwd = $path->isAbsolute() ?
+            $this->root() :
+            $this;
+
+        foreach ($path->getIterator() as $pathPart) {
+            $cwd = $cwd->containsAttributeId($pathPart);
+        }
+
+        return $cwd;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @throws \Exception
+     *
+     * @return \drupol\phptree\Node\NodeInterface|\drupol\phpvfs\Node\DirectoryInterface
+     */
+    public function mkdir(string $id)
+    {
+        $dir = self::create($id);
+
+        return $this->add($dir->root());
+    }
+
+    /**
+     * @param string $id
+     *
+     * @throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\DirectoryInterface
+     */
+    public function rmdir(string $id): DirectoryInterface
+    {
+        if (!$this->exist($id)) {
+            throw new \Exception(\sprintf('Cannot remove %s: No such file or directory.', $id));
+        }
+
+        $path = Path::fromString($id);
+
+        if ($path->isRoot()) {
+            throw new \Exception(\sprintf('Cannot remove root directory.'));
+        }
+
+        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
+        $cwd = $path->isAbsolute() ?
+            $this->root() :
+            $this;
+
+        $last = $path->getLastPart();
+
+        foreach ($cwd->all() as $child) {
+            if (!($child instanceof DirectoryInterface)) {
+                continue;
+            }
+
+            if ($child->getAttribute('id') !== $last) {
+                continue;
+            }
+
+            if (null !== $cwd = $child->getParent()) {
+                $cwd->remove($child);
+            }
+        }
+
+        if ($cwd instanceof DirectoryInterface) {
+            return $cwd;
+        }
     }
 }
