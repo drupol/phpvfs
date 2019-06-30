@@ -34,10 +34,6 @@ class Inspect
             }
         }
 
-        if (null === $cwd) {
-            throw new \Exception('TODO');
-        }
-
         return \get_class($cwd);
     }
 }
