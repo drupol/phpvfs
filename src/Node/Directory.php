@@ -178,29 +178,16 @@ class Directory extends FilesystemNode implements DirectoryInterface
             throw new \Exception(\sprintf('Cannot remove root directory.'));
         }
 
-        /** @var \drupol\phpvfs\Node\DirectoryInterface $cwd */
-        $cwd = $path->isAbsolute() ?
-            $this->root() :
-            $this;
+        $cwd = $this->get($id);
 
-        $last = $path->getLastPart();
+        if (($cwd instanceof DirectoryInterface) && (null !== $parent = $cwd->getParent())) {
+            $parent->remove($cwd);
 
-        foreach ($cwd->all() as $child) {
-            if (!($child instanceof DirectoryInterface)) {
-                continue;
-            }
-
-            if ($child->getAttribute('id') !== $last) {
-                continue;
-            }
-
-            if (null !== $cwd = $child->getParent()) {
-                $cwd->remove($child);
+            if (($parent = $cwd->getParent()) instanceof DirectoryInterface) {
+                return $parent;
             }
         }
 
-        if ($cwd instanceof DirectoryInterface) {
-            return $cwd;
-        }
+        return $this;
     }
 }
