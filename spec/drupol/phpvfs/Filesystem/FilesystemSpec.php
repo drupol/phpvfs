@@ -67,6 +67,29 @@ class FilesystemSpec extends ObjectBehavior
             ->during('get', ['/c']);
     }
 
+    public function it_can_set_and_get_its_cwd()
+    {
+        $this->beConstructedWith('/a/b/c/d');
+
+        $this
+            ->getCwd()
+            ->getAttribute('id')
+            ->shouldReturn('d');
+
+        $cwd = $this->getCwd();
+
+        $cwd = $cwd->getParent();
+
+        $this
+            ->setCwd($cwd)
+            ->shouldReturn($this);
+
+        $this
+            ->getCwd()
+            ->getAttribute('id')
+            ->shouldReturn('c');
+    }
+
     public function it_can_touch()
     {
         $this->beConstructedWith('/a/b/c/d');
@@ -119,28 +142,5 @@ class FilesystemSpec extends ObjectBehavior
         $this->beConstructedWith('/');
 
         $this->shouldHaveType(Filesystem::class);
-    }
-
-    public function it_can_set_and_get_its_cwd()
-    {
-        $this->beConstructedWith('/a/b/c/d');
-
-        $this
-            ->getCwd()
-            ->getAttribute('id')
-            ->shouldReturn('d');
-
-        $cwd = $this->getCwd();
-
-        $cwd = $cwd->getParent();
-
-        $this
-            ->setCwd($cwd)
-            ->shouldReturn($this);
-
-        $this
-            ->getCwd()
-            ->getAttribute('id')
-            ->shouldReturn('c');
     }
 }
