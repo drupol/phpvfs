@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace spec\drupol\phpvfs\Node;
 
+use drupol\phptree\Node\AttributeNode;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\File;
 use PhpSpec\ObjectBehavior;
@@ -46,7 +47,15 @@ class DirectorySpec extends ObjectBehavior
             ->root()
             ->count()
             ->shouldReturn(8);
+
+        $differentNodeTypeNotExtendingVfs = new class() extends AttributeNode {
+        };
+
+        $this
+            ->shouldThrow(\Exception::class)
+            ->during('add', [$differentNodeTypeNotExtendingVfs]);
     }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType(Directory::class);
