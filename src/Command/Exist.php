@@ -28,8 +28,9 @@ class Exist implements CommandInterface
                 $vfs->getCwd()->root() :
                 $vfs->getCwd();
 
-            $pathPartExist = false;
             foreach ($path->getIterator() as $pathPart) {
+                $pathPartExist = false;
+
                 if (\DIRECTORY_SEPARATOR === $pathPart) {
                     $pathPartExist = true;
                 } elseif (null !== $child = $cwd->containsAttributeId($pathPart)) {
@@ -40,9 +41,9 @@ class Exist implements CommandInterface
                 $existId = $existId && $pathPartExist;
             }
 
-            $existId = $exist && $existId;
+            $exist = $exist && $existId;
         }
 
-        return $existId;
+        return $exist;
     }
 }
