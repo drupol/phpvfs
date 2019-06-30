@@ -7,6 +7,9 @@ namespace drupol\phpvfs\Command;
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\File;
 
+/**
+ * Class Touch.
+ */
 class Touch
 {
     /**

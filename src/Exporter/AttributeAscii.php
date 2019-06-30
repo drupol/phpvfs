@@ -8,6 +8,9 @@ use drupol\phptree\Exporter\Ascii;
 use drupol\phptree\Node\NodeInterface;
 use drupol\phpvfs\Node\FilesystemNodeInterface;
 
+/**
+ * Class AttributeAscii.
+ */
 class AttributeAscii extends Ascii
 {
     /**

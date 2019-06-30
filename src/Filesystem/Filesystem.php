@@ -12,6 +12,9 @@ use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\FilesystemNodeInterface;
 
+/**
+ * Class Filesystem.
+ */
 class Filesystem implements FilesystemInterface
 {
     /**

@@ -7,6 +7,9 @@ namespace drupol\phpvfs\Command;
 use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Utils\Path;
 
+/**
+ * Class Exist.
+ */
 class Exist implements CommandInterface
 {
     /**

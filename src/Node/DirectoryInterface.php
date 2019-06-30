@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Node;
 
+/**
+ * Interface DirectoryInterface.
+ */
 interface DirectoryInterface extends FilesystemNodeInterface
 {
     /**

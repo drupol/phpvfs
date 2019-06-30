@@ -6,6 +6,9 @@ namespace drupol\phpvfs\Node;
 
 use drupol\phpvfs\Utils\Path;
 
+/**
+ * Class Directory.
+ */
 class Directory extends FilesystemNode implements DirectoryInterface
 {
     /**

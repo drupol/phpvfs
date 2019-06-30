@@ -8,6 +8,9 @@ use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\FilesystemNodeInterface;
 use drupol\phpvfs\Utils\Path;
 
+/**
+ * Class Get.
+ */
 class Get
 {
     /**

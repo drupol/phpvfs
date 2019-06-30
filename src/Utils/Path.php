@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Utils;
 
+/**
+ * Class Path.
+ */
 class Path implements PathInterface, \IteratorAggregate
 {
     /**

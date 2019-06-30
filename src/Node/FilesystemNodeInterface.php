@@ -8,7 +8,7 @@ use drupol\phptree\Node\AttributeNodeInterface;
 use drupol\phpvfs\Utils\Path;
 
 /**
- * Interface VfsInterface.
+ * Interface FilesystemNodeInterface.
  */
 interface FilesystemNodeInterface extends AttributeNodeInterface
 {

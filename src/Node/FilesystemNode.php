@@ -9,7 +9,7 @@ use drupol\phptree\Node\NodeInterface;
 use drupol\phpvfs\Utils\Path;
 
 /**
- * Class Vfs.
+ * Class FilesystemNode.
  */
 abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInterface
 {

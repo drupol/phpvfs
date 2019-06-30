@@ -8,6 +8,9 @@ use drupol\phpvfs\Filesystem\FilesystemInterface;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Utils\Path;
 
+/**
+ * Class Cd.
+ */
 class Cd
 {
     /**
