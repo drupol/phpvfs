@@ -60,22 +60,28 @@ interface StreamWrapperInterface
     /**
      * @param int $cast_as
      *
-     * @return resource
+     * @return false|resource
+     *
+     * @see http://php.net/streamwrapper.stream-cast
      */
     public function stream_cast(int $cast_as); // phpcs:ignore
 
     /**
-     * @return mixed
+     * @see http://php.net/streamwrapper.stream-close
      */
-    public function stream_close(); // phpcs:ignore
+    public function stream_close(): void; // phpcs:ignore
 
     /**
      * @return bool
+     *
+     * @see http://php.net/streamwrapper.stream-eof
      */
     public function stream_eof(): bool; // phpcs:ignore
 
     /**
      * @return bool
+     *
+     * @see http://php.net/streamwrapper.stream-flush
      */
     public function stream_flush(): bool; // phpcs:ignore
 
@@ -83,6 +89,8 @@ interface StreamWrapperInterface
      * @param mixed $operation
      *
      * @return bool
+     *
+     * @see http://php.net/streamwrapper.stream-lock
      */
     public function stream_lock($operation): bool; // phpcs:ignore
 
@@ -93,21 +101,27 @@ interface StreamWrapperInterface
      * @param string $opened_path
      *
      * @return bool
+     *
+     * @see http://php.net/streamwrapper.stream-open
      */
     public function stream_open(string $path, string $mode, int $options, string &$opened_path): bool; // phpcs:ignore
 
     /**
      * @param int $count
      *
-     * @return string
+     * @return false|string
+     *
+     * @see http://php.net/streamwrapper.stream-read
      */
-    public function stream_read(int $count): string; // phpcs:ignore
+    public function stream_read(int $count); // phpcs:ignore
 
     /**
      * @param int $offset
      * @param int $whence = SEEK_SET
      *
      * @return bool
+     *
+     * @see http://php.net/streamwrapper.stream-seek
      */
     public function stream_seek(int $offset, int $whence = SEEK_SET): bool; // phpcs:ignore
 
@@ -122,11 +136,15 @@ interface StreamWrapperInterface
 
     /**
      * @return array
+     *
+     * @see http://php.net/streamwrapper.stream-stat
      */
     public function stream_stat(): array; // phpcs:ignore
 
     /**
      * @return int
+     *
+     * @see http://php.net/streamwrapper.stream-tell
      */
     public function stream_tell(): int; // phpcs:ignore
 
@@ -134,6 +152,8 @@ interface StreamWrapperInterface
      * @param string $data
      *
      * @return int
+     *
+     * @see http://php.net/streamwrapper.stream-write
      */
     public function stream_write(string $data): int; // phpcs:ignore
 

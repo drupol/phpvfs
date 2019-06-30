@@ -13,17 +13,57 @@ use drupol\phpvfs\Node\File;
 use drupol\phpvfs\Node\FileInterface;
 use drupol\phpvfs\Utils\Path;
 
-class PhpVfs
+/**
+ * Class PhpVfs.
+ */
+class PhpVfs implements StreamWrapperInterface
 {
-    public const SCHEME = 'phpvfs';
+    /**
+     * The scheme.
+     */
+    protected const SCHEME = 'phpvfs';
 
     /**
+     * The stream context.
+     *
      * @var array
      */
     public $context;
 
     /**
-     * @return \drupol\phpvfs\Filesystem\FilesystemInterface
+     * {@inheritdoc}
+     */
+    public function dir_closedir(): bool // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dir_opendir(string $path, int $options): bool // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dir_readdir(): string // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dir_rewinddir(): bool // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public static function fs(): FilesystemInterface
     {
@@ -35,8 +75,15 @@ class PhpVfs
     }
 
     /**
-     * @param \drupol\phpvfs\Filesystem\Filesystem $filesystem
-     * @param array $options
+     * {@inheritdoc}
+     */
+    public function mkdir(string $path, int $mode, int $options): bool
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public static function register(Filesystem $filesystem, array $options = [])
     {
@@ -52,12 +99,7 @@ class PhpVfs
     }
 
     /**
-     * @param string $from
-     * @param string $to
-     *
-     * @throws \Exception
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function rename(string $from, string $to): bool
     {
@@ -97,7 +139,23 @@ class PhpVfs
     }
 
     /**
-     * @see http://php.net/streamwrapper.stream-close
+     * {@inheritdoc}
+     */
+    public function rmdir(string $path, int $options): bool
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function stream_cast(int $cast_as) // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function stream_close(): void // phpcs:ignore
     {
@@ -109,9 +167,7 @@ class PhpVfs
     }
 
     /**
-     * @return bool
-     *
-     * @see http://php.net/streamwrapper.stream-eof
+     * {@inheritdoc}
      */
     public function stream_eof(): bool // phpcs:ignore
     {
@@ -119,16 +175,27 @@ class PhpVfs
     }
 
     /**
-     * @param string $resource
-     * @param mixed $mode
-     * @param mixed $options
-     * @param mixed $openedPath
-     *
-     * @throws \Exception
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function stream_open(string $resource, $mode, $options, &$openedPath) // phpcs:ignore
+    public function stream_flush(): bool // phpcs:ignore
+    {
+        \clearstatcache();
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function stream_lock($operation): bool // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function stream_open(string $resource, string $mode, int $options, ?string &$openedPath): bool // phpcs:ignore
     {
         $mode = \str_split(\str_replace('b', '', $mode));
 
@@ -172,11 +239,7 @@ class PhpVfs
     }
 
     /**
-     * @see http://php.net/streamwrapper.stream-read
-     *
-     * @param int $bytes
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function stream_read(int $bytes) // phpcs:ignore
     {
@@ -188,7 +251,23 @@ class PhpVfs
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
+     */
+    public function stream_seek(int $offset, int $whence = SEEK_SET): bool // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function stream_set_option(int $option, int $arg1, int $arg2): bool // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function stream_stat(): array // phpcs:ignore
     {
@@ -200,11 +279,17 @@ class PhpVfs
     }
 
     /**
-     * @param string $data
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function stream_write(string $data) // phpcs:ignore
+    public function stream_tell(): int // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function stream_write(string $data): int // phpcs:ignore
     {
         if (null !== $file = $this->getCurrentFile()) {
             return $file->write($data);
@@ -214,11 +299,9 @@ class PhpVfs
     }
 
     /**
-     * @param string $path
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
-    public function unlink(string $path)
+    public function unlink(string $path): bool
     {
         if (true === Exist::exec($this::fs(), $path)) {
             $file = Get::exec($this::fs(), $path);
@@ -227,14 +310,24 @@ class PhpVfs
                 $parent->delete($file);
             }
         }
+
+        return true;
     }
 
     /**
-     * @todo
+     * {@inheritdoc}
      */
     public static function unregister()
     {
         \stream_wrapper_unregister(self::SCHEME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function url_stat(string $path, int $flags): array // phpcs:ignore
+    {
+        throw new \Exception('Not implemented yet.');
     }
 
     /**
