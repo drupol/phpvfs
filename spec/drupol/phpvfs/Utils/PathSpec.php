@@ -23,7 +23,7 @@ class PathSpec extends ObjectBehavior
 
         $this
             ->dirname()
-            ->shouldReturn('/a/b/c');
+            ->shouldReturn('phpvfs://a/b/c');
 
         $this
             ->isAbsolute()

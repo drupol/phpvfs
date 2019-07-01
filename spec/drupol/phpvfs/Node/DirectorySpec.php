@@ -87,7 +87,7 @@ class DirectorySpec extends ObjectBehavior
             ->cd('/')
             ->getPath()
             ->__toString()
-            ->shouldBe('//');
+            ->shouldBe('/');
     }
 
     public function it_can_get_a_subdirectory()

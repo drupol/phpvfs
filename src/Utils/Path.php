@@ -43,7 +43,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function basename(): string
     {
-        return \basename(($this->isAbsolute() ? '/' : '') . \implode('/', $this->getFragments()));
+        return \basename($this->__toString());
     }
 
     /**
@@ -51,7 +51,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function dirname(): string
     {
-        return \dirname(($this->isAbsolute() ? '/' : '') . \implode('/', $this->getFragments()));
+        return \dirname($this->__toString());
     }
 
     /**
@@ -178,12 +178,6 @@ class Path implements PathInterface, \IteratorAggregate
      */
     protected function getFragments(): array
     {
-        $fragments = $this->fragments;
-
-        if (empty($fragments[0])) {
-            $fragments[0] = \DIRECTORY_SEPARATOR;
-        }
-
-        return $fragments;
+        return \array_filter($this->fragments);
     }
 }
