@@ -98,7 +98,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->get('/a/b/c/d/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'r');
         \fwrite($file, 'foo');
         \fclose($file);
 

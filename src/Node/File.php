@@ -126,6 +126,19 @@ class File extends FilesystemNode implements FileInterface
     }
 
     /**
+     * @param int $bytes
+     */
+    public function truncate(int $bytes = 0)
+    {
+        $this->setPosition(0);
+        $newData = \substr($this->getAttribute('content'), 0, $bytes);
+
+        if (\is_string($newData)) {
+            $this->setAttribute('content', $newData);
+        }
+    }
+
+    /**
      * @param string $data
      *
      * @return int

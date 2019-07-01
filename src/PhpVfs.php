@@ -200,17 +200,20 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function stream_open(string $resource, string $mode, int $options, ?string &$openedPath): bool // phpcs:ignore
     {
-        $mode = \str_split(\str_replace('b', '', $mode));
+        $modeSplit = \str_split(\str_replace('b', '', $mode));
 
-        $appendMode = \in_array('a', $mode, true);
-        $readMode = \in_array('r', $mode, true);
-        $writeMode = \in_array('w', $mode, true);
-        $extended = \in_array('+', $mode, true);
+        $appendMode = \in_array('a', $modeSplit, true);
+        $readMode = \in_array('r', $modeSplit, true);
+        $writeMode = \in_array('w', $modeSplit, true);
+        $extended = \in_array('+', $modeSplit, true);
 
         $resourcePath = Path::fromString($resource);
 
-        if (!$this::fs()->getCwd()->exist($resource)) {
-            if ($readMode || !$this::fs()->getCwd()->exist($resourcePath->dirname())) {
+        $resourceExist = $this::fs()->getCwd()->exist($resource);
+        $resourceDirnameExist = $this::fs()->getCwd()->exist($resourcePath->dirname());
+
+        if (false === $resourceExist) {
+            if (true === $readMode) {
                 if ($options & STREAM_REPORT_ERRORS) {
                     \trigger_error(\sprintf('%s: failed to open stream.', $resourcePath), E_USER_WARNING);
                 }
@@ -218,23 +221,32 @@ class PhpVfs implements StreamWrapperInterface
                 return false;
             }
 
-            $file = File::create($resource);
-
-            $this->setCurrentFile($file);
             $this::fs()
                 ->getCwd()
-                ->add($file->root());
+                ->add(File::create($resource)->root());
         }
 
         $file = $this::fs()->getCwd()->get($resource);
 
         if (!($file instanceof FileInterface)) {
+            if ($options & STREAM_REPORT_ERRORS) {
+                \trigger_error(\sprintf('fopen(%s): failed to open stream: Not a file.', $resource), E_USER_WARNING);
+            }
+
             return false;
         }
 
-        $file->setPosition(0);
+        if (true === $appendMode) {
+            $file->seekToEnd();
+        } elseif (true === $writeMode) {
+            $file->truncate();
+            \clearstatcache();
+        }
 
+        $file->setPosition(0);
         $this->setCurrentFile($file);
+
+        $openedPath = $file->getPath()->__toString();
 
         return true;
     }
