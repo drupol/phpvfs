@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * @file.
  * FileInterface.php
  */
 
 namespace drupol\phpvfs\Handler;
-
 
 /**
  * Interface FileInterface.

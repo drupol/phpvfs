@@ -63,6 +63,10 @@ class FileSpec extends ObjectBehavior
         $this
             ->write('content')
             ->shouldReturn($this);
+
+        $this
+            ->read()
+            ->shouldReturn('content');
     }
 
     public function it_get_its_path()

@@ -154,6 +154,16 @@ interface StreamWrapperInterface
     public function stream_tell(): int; // phpcs:ignore
 
     /**
+     * @param int $bytes
+     *
+     * @return bool
+     *   Returns TRUE on success or FALSE on failure.
+     *
+     * @see http://php.net/streamwrapper.stream-truncate
+     */
+    public function stream_truncate(int $bytes): bool; // phpcs:ignore
+
+    /**
      * @param string $data
      *
      * @return int
