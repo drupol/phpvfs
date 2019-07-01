@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace drupol\phpvfs;
+namespace drupol\phpvfs\StreamWrapper;
 
 use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Filesystem\FilesystemInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace drupol\phpvfs\Handler;
+namespace drupol\phpvfs\StreamWrapper\Handler;
 
 use drupol\phpvfs\Node\FileInterface as NodeFileInterface;
 

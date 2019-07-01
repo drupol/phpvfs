@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace spec\drupol\phpvfs;
+namespace spec\drupol\phpvfs\StreamWrapper;
 
 use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
 use drupol\phpvfs\Node\FileInterface;
 use drupol\phpvfs\Node\File;
-use drupol\phpvfs\PhpVfs;
+use drupol\phpvfs\StreamWrapper\PhpVfs;
 use PhpSpec\ObjectBehavior;
 
 class PhpVfsSpec extends ObjectBehavior

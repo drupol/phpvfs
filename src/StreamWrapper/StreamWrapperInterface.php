@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace drupol\phpvfs;
+namespace drupol\phpvfs\StreamWrapper;
 
 /**
  * Interface StreamWrapperInterface.
