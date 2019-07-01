@@ -4,12 +4,14 @@ declare(strict_types = 1);
 
 namespace drupol\phpvfs\Handler;
 
-use drupol\phpvfs\Node\FileInterface;
+use drupol\phpvfs\Node\FileInterface as NodeFileInterface;
 
 /**
  * Class File.
+ *
+ * @internal
  */
-class File
+final class File implements FileInterface
 {
     /**
      * @var \drupol\phpvfs\Node\FileInterface
@@ -33,28 +35,40 @@ class File
      * @param string $mode
      * @param int $position
      */
-    public function __construct(FileInterface $file, string $mode, int $position = 0)
+    public function __construct(NodeFileInterface $file, string $mode, int $position = 0)
     {
         $this->file = $file;
         $this->mode = $mode;
         $this->position = $position;
     }
 
-    public function getFile(): FileInterface
+    /**
+     * {@inheritdoc}
+     */
+    public function getFile(): NodeFileInterface
     {
         return $this->file;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMode(): string
     {
         return $this->mode;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPosition(): int
     {
         return $this->position;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isAppendable(): bool
     {
         $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
@@ -62,6 +76,9 @@ class File
         return \in_array('a', $modeSplit, true);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isExtended(): bool
     {
         $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
@@ -69,6 +86,9 @@ class File
         return \in_array('+', $modeSplit, true);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isReadable(): bool
     {
         $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
@@ -76,6 +96,9 @@ class File
         return \in_array('r', $modeSplit, true);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isWritable(): bool
     {
         $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
@@ -84,9 +107,7 @@ class File
     }
 
     /**
-     * @param int $bytes
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function read(int $bytes): string
     {
@@ -101,6 +122,9 @@ class File
         return $data;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function seekToEnd()
     {
         return $this->setPosition(
@@ -108,6 +132,9 @@ class File
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setMode(string $mode): File
     {
         $this->mode = $mode;
@@ -115,6 +142,9 @@ class File
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setPosition(int $bytes): File
     {
         $this->position = $bytes;
@@ -123,7 +153,7 @@ class File
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function size(): int
     {
@@ -131,7 +161,7 @@ class File
     }
 
     /**
-     * @param int $bytes
+     * {@inheritdoc}
      */
     public function truncate(int $bytes = 0)
     {
@@ -144,9 +174,7 @@ class File
     }
 
     /**
-     * @param string $data
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function write(string $data): int
     {
@@ -163,9 +191,7 @@ class File
     }
 
     /**
-     * @param int $offset
-     *
-     * @return int
+     * {@inheritdoc}
      */
     protected function offsetPosition($offset): int
     {

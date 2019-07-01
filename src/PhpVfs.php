@@ -341,9 +341,9 @@ class PhpVfs implements StreamWrapperInterface
     }
 
     /**
-     * @return null|\drupol\phpvfs\Handler\File
+     * @return null|\drupol\phpvfs\Handler\FileInterface
      */
-    protected function getCurrentFile(): ?Handler\File
+    protected function getCurrentFile(): ?Handler\FileInterface
     {
         $options = \stream_context_get_options(
             \stream_context_get_default()
@@ -353,9 +353,9 @@ class PhpVfs implements StreamWrapperInterface
     }
 
     /**
-     * @param null|\drupol\phpvfs\Handler\File $file
+     * @param \drupol\phpvfs\Handler\FileInterface|null $file
      */
-    protected function setCurrentFile(?Handler\File $file)
+    protected function setCurrentFile(?Handler\FileInterface $file)
     {
         $options = \stream_context_get_options(
             \stream_context_get_default()
