@@ -59,16 +59,9 @@ interface FileInterface
     public function seekToEnd();
 
     /**
-     * @param string $mode
-     *
-     * @return \drupol\phpvfs\Handler\File
-     */
-    public function setMode(string $mode): File;
-
-    /**
      * @param int $bytes
      *
-     * @return \drupol\phpvfs\Handler\File
+     * @return \drupol\phpvfs\StreamWrapper\Handler\File
      */
     public function setPosition(int $bytes): File;
 
@@ -79,8 +72,10 @@ interface FileInterface
 
     /**
      * @param int $bytes
+     *
+     * @return \drupol\phpvfs\StreamWrapper\Handler\File
      */
-    public function truncate(int $bytes = 0);
+    public function truncate(int $bytes = 0): File;
 
     /**
      * @param string $data

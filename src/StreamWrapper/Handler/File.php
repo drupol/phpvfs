@@ -135,16 +135,6 @@ final class File implements FileInterface
     /**
      * {@inheritdoc}
      */
-    public function setMode(string $mode): File
-    {
-        $this->mode = $mode;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setPosition(int $bytes): File
     {
         $this->position = $bytes;
@@ -163,14 +153,16 @@ final class File implements FileInterface
     /**
      * {@inheritdoc}
      */
-    public function truncate(int $bytes = 0)
+    public function truncate(int $bytes = 0): File
     {
-        $this->setPosition(0);
+        $this->setPosition($bytes);
         $newData = \substr($this->getFile()->getAttribute('content'), 0, $bytes);
 
         if (\is_string($newData)) {
             $this->getFile()->setAttribute('content', $newData);
         }
+
+        return $this;
     }
 
     /**

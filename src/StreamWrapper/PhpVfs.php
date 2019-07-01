@@ -366,7 +366,7 @@ class PhpVfs implements StreamWrapperInterface
     }
 
     /**
-     * @return null|\drupol\phpvfs\Handler\FileInterface
+     * @return null|\drupol\phpvfs\StreamWrapper\Handler\FileInterface
      */
     private function getCurrentFile(): ?Handler\FileInterface
     {
@@ -378,7 +378,7 @@ class PhpVfs implements StreamWrapperInterface
     }
 
     /**
-     * @param null|\drupol\phpvfs\Handler\FileInterface $file
+     * @param null|\drupol\phpvfs\StreamWrapper\Handler\FileInterface $file
      */
     private function setCurrentFile(?Handler\FileInterface $file)
     {
