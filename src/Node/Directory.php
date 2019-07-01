@@ -121,7 +121,9 @@ class Directory extends FilesystemNode implements DirectoryInterface
     /**
      * @param string $id
      *
-     * @return \drupol\phpvfs\Node\DirectoryInterface
+     * @throws \Exception
+     *
+     * @return \drupol\phpvfs\Node\FilesystemNodeInterface
      */
     public function get(string $id): FilesystemNodeInterface
     {
@@ -144,10 +146,6 @@ class Directory extends FilesystemNode implements DirectoryInterface
             $cwd = $cwd->containsAttributeId($pathPart);
         }
 
-        if (null === $cwd) {
-            \xdebug_break();
-        }
-
         return $cwd;
     }
 
@@ -156,13 +154,17 @@ class Directory extends FilesystemNode implements DirectoryInterface
      *
      * @throws \Exception
      *
-     * @return \drupol\phptree\Node\NodeInterface|\drupol\phpvfs\Node\DirectoryInterface
+     * @return \drupol\phpvfs\Node\DirectoryInterface
      */
-    public function mkdir(string $id)
+    public function mkdir(string $id): DirectoryInterface
     {
         $dir = self::create($id);
 
-        return $this->add($dir->root());
+        $dir = $this->add($dir->root());
+
+        if ($dir instanceof DirectoryInterface) {
+            return $dir;
+        }
     }
 
     /**

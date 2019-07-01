@@ -10,40 +10,14 @@ namespace drupol\phpvfs\Node;
 interface FileInterface extends FilesystemNodeInterface
 {
     /**
-     * @return int
-     */
-    public function getPosition(): int;
-
-    /**
-     * @param int $bytes
-     *
      * @return string
      */
-    public function read(int $bytes): string;
-
-    /**
-     * @return mixed
-     */
-    public function seekToEnd();
-
-    /**
-     * @param int $position
-     *
-     * @return \drupol\phpvfs\Node\FileInterface
-     */
-    public function setPosition(int $position): FileInterface;
-
-    /**
-     * @param int $bytes
-     *
-     * @return mixed
-     */
-    public function truncate(int $bytes = 0);
+    public function read(): string;
 
     /**
      * @param string $data
      *
-     * @return int
+     * @return \drupol\phpvfs\Node\FileInterface
      */
-    public function write(string $data): int;
+    public function write(string $data): FileInterface;
 }

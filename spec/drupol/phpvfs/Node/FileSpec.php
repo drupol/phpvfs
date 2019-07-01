@@ -23,29 +23,8 @@ class FileSpec extends ObjectBehavior
             ->shouldReturn('file.txt');
 
         $this
-            ->getPosition()
-            ->shouldReturn(0);
-
-        $this
-            ->read(8192)
+            ->read()
             ->shouldReturn('content');
-
-        $this
-            ->getPosition()
-            ->shouldReturn(7);
-
-        $this
-            ->read(8192)
-            ->shouldReturn('');
-
-        $this
-            ->setPosition(0)
-            ->read(8192)
-            ->shouldReturn('content');
-
-        $this
-            ->size()
-            ->shouldReturn(7);
 
         $this
             ->count()
@@ -78,34 +57,12 @@ class FileSpec extends ObjectBehavior
             ->shouldReturn(3);
 
         $this
-            ->getPosition()
-            ->shouldReturn(0);
-
-        $this
-            ->read(8192)
+            ->read()
             ->shouldReturn('');
 
         $this
             ->write('content')
-            ->shouldReturn(7);
-
-        $this
-            ->getPosition()
-            ->shouldReturn(7);
-
-        $this
-            ->atEof()
-            ->shouldReturn(true);
-
-        $this
-            ->setPosition(0)
-            ->atEof()
-            ->shouldReturn(false);
-
-        $this
-            ->seekToEnd()
-            ->getPosition()
-            ->shouldReturn(7);
+            ->shouldReturn($this);
     }
 
     public function it_get_its_path()

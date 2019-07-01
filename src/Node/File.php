@@ -28,14 +28,6 @@ class File extends FilesystemNode implements FileInterface
     }
 
     /**
-     * @return bool
-     */
-    public function atEof()
-    {
-        return $this->getPosition() >= \strlen($this->getAttribute('content'));
-    }
-
-    /**
      * @param string $id
      * @param string $content
      * @param array $attributes
@@ -70,109 +62,22 @@ class File extends FilesystemNode implements FileInterface
     }
 
     /**
-     * @return int
-     */
-    public function getPosition(): int
-    {
-        return $this->getAttribute('position');
-    }
-
-    /**
-     * @param int $bytes
-     *
      * @return string
      */
-    public function read(int $bytes): string
+    public function read(): string
     {
-        $data = \substr(
-            $this->getAttribute('content'),
-            $this->getPosition(),
-            $bytes
-        );
-
-        $this->offsetPosition($bytes);
-
-        return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function seekToEnd()
-    {
-        return $this->setPosition(
-            \strlen($this->getAttribute('content'))
-        );
-    }
-
-    /**
-     * @param int $position
-     *
-     * @return $this
-     */
-    public function setPosition(int $position): FileInterface
-    {
-        $this->setAttribute('position', $position);
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function size(): int
-    {
-        return \strlen($this->getAttribute('content'));
-    }
-
-    /**
-     * @param int $bytes
-     */
-    public function truncate(int $bytes = 0)
-    {
-        $this->setPosition(0);
-        $newData = \substr($this->getAttribute('content'), 0, $bytes);
-
-        if (\is_string($newData)) {
-            $this->setAttribute('content', $newData);
-        }
+        return $this->getAttribute('content');
     }
 
     /**
      * @param string $data
      *
-     * @return int
+     * @return \drupol\phpvfs\Node\FileInterface
      */
-    public function write(string $data): int
+    public function write(string $data): FileInterface
     {
-        $content = $this->getAttribute('content');
-        $content = \substr($content, 0, $this->getPosition());
+        $this->setAttribute('content', $data);
 
-        $content .= $data;
-        $this->setAttribute('content', $content);
-
-        $written = \strlen($data);
-        $this->offsetPosition($written);
-
-        return $written;
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return int
-     */
-    protected function offsetPosition($offset): int
-    {
-        $contentSize = $this->size();
-        $newPosition = $this->getPosition() + $offset;
-
-        $newPosition = $contentSize < $newPosition ?
-            $contentSize :
-            $newPosition;
-
-        $this->setPosition($newPosition);
-
-        return $newPosition;
+        return $this;
     }
 }

@@ -124,10 +124,6 @@ class PhpVfs implements StreamWrapperInterface
 
         $from->setAttribute('id', $toPath->basename());
 
-        if ($from instanceof FileInterface) {
-            $from->setPosition(0);
-        }
-
         $directory
             ->add($from);
 
@@ -236,15 +232,16 @@ class PhpVfs implements StreamWrapperInterface
             return false;
         }
 
+        $fileHandler = new Handler\File($file, $mode, 0);
+
         if (true === $appendMode) {
-            $file->seekToEnd();
+            $fileHandler->seekToEnd();
         } elseif (true === $writeMode) {
-            $file->truncate();
+            $fileHandler->truncate();
             \clearstatcache();
         }
 
-        $file->setPosition(0);
-        $this->setCurrentFile($file);
+        $this->setCurrentFile($fileHandler);
 
         $openedPath = $file->getPath()->__toString();
 
@@ -256,11 +253,11 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function stream_read(int $bytes) // phpcs:ignore
     {
-        if (null !== $file = $this->getCurrentFile()) {
-            return $file->read($bytes);
+        if ((null === $file = $this->getCurrentFile()) || (false === $file->isReadable())) {
+            return false;
         }
 
-        return false;
+        return $file->read($bytes);
     }
 
     /**
@@ -288,7 +285,7 @@ class PhpVfs implements StreamWrapperInterface
             return [];
         }
 
-        return (array) $file->getAttributes();
+        return (array) $file->getFile()->getAttributes();
     }
 
     /**
@@ -304,11 +301,11 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function stream_write(string $data): int // phpcs:ignore
     {
-        if (null !== $file = $this->getCurrentFile()) {
-            return $file->write($data);
+        if ((null === $file = $this->getCurrentFile()) || (false === $file->isWritable())) {
+            return 0;
         }
 
-        return 0;
+        return $file->write($data);
     }
 
     /**
@@ -344,9 +341,9 @@ class PhpVfs implements StreamWrapperInterface
     }
 
     /**
-     * @return null|FileInterface
+     * @return null|\drupol\phpvfs\Handler\File
      */
-    protected function getCurrentFile(): ?FileInterface
+    protected function getCurrentFile(): ?Handler\File
     {
         $options = \stream_context_get_options(
             \stream_context_get_default()
@@ -356,9 +353,9 @@ class PhpVfs implements StreamWrapperInterface
     }
 
     /**
-     * @param null|FileInterface $file
+     * @param null|\drupol\phpvfs\Handler\File $file
      */
-    protected function setCurrentFile(?FileInterface $file)
+    protected function setCurrentFile(?Handler\File $file)
     {
         $options = \stream_context_get_options(
             \stream_context_get_default()
