@@ -109,7 +109,7 @@ abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInt
      *
      * @return null|\drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    protected function contains(FilesystemNodeInterface $node): ?FilesystemNodeInterface
+    private function contains(FilesystemNodeInterface $node): ?FilesystemNodeInterface
     {
         /** @var \drupol\phpvfs\Node\FilesystemNodeInterface $child */
         foreach ($this->children() as $child) {

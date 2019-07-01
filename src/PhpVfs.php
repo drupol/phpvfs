@@ -211,7 +211,7 @@ class PhpVfs implements StreamWrapperInterface
         if (false === $resourceExist) {
             if (true === $readMode) {
                 if ($options & STREAM_REPORT_ERRORS) {
-                    \trigger_error(\sprintf('%s: failed to open stream.', $resourcePath), E_USER_WARNING);
+                    \trigger_error(\sprintf('%s: failed to open stream: Unknown resource.', $resourcePath), E_USER_WARNING);
                 }
 
                 return false;
@@ -232,7 +232,7 @@ class PhpVfs implements StreamWrapperInterface
             return false;
         }
 
-        $fileHandler = new Handler\File($file, $mode, 0);
+        $fileHandler = new Handler\File($file, $mode);
 
         if (true === $appendMode) {
             $fileHandler->seekToEnd();

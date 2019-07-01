@@ -188,6 +188,32 @@ class PhpVfsSpec extends ObjectBehavior
         $this::unregister();
     }
 
+    public function it_can_seek()
+    {
+        $vfs = new Filesystem('/');
+
+        $file = File::create('/a/b/c/d/foo.txt', 'abc');
+        $vfs
+            ->getCwd()
+            ->add($file);
+
+        $this::register($vfs);
+
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'r');
+
+        $this
+            ->stream_seek(2)
+            ->shouldReturn(true);
+
+        $this
+            ->stream_read(1)
+            ->shouldReturn('c');
+
+        \fclose($fileHandler);
+
+        $this::unregister();
+    }
+
     public function it_can_truncate()
     {
         $vfs = new Filesystem('/');

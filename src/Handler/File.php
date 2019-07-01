@@ -193,7 +193,7 @@ final class File implements FileInterface
     /**
      * {@inheritdoc}
      */
-    private function offsetPosition($offset): int
+    private function offsetPosition(int $offset): int
     {
         $contentSize = $this->size();
         $newPosition = $this->getPosition() + $offset;
@@ -201,8 +201,6 @@ final class File implements FileInterface
         $newPosition = $contentSize < $newPosition ?
             $contentSize :
             $newPosition;
-
-        $newPosition = (int) $newPosition;
 
         $this->setPosition($newPosition);
 
