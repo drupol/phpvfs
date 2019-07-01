@@ -23,6 +23,8 @@ An implementation of virtual file system and its stream wrapper in PHP.
 
 ## Usage
 
+### Using the default PHP stream wrapper.
+
 ```php
 <?php
 
@@ -32,10 +34,14 @@ require_once 'vendor/autoload.php';
 
 use drupol\phpvfs\Exporter\AttributeAscii;
 use drupol\phpvfs\Filesystem\Filesystem;
-use drupol\phpvfs\PhpVfs;
+use drupol\phpvfs\StreamWrapper\PhpVfs;
+use drupol\phpvfs\Node\Directory;
+
+// Create directory container.
+$root = Directory::create('/');
 
 // Create a virtual filesystem.
-$vfs = new Filesystem('/');
+$vfs = new Filesystem($root);
 
 // Register a new PHP streamwrapper (phpvfs://)
 PhpVfs::register($vfs);
@@ -62,6 +68,32 @@ file_get_contents('phpvfs://a/b/c/bar.txt'); // returns 'bar'
 
 // Export the filesystem into an ascii tree.
 echo (new AttributeAscii())->export($vfs->root());
+```
+
+### Using simple directories structure
+
+```php
+<?php
+
+declare(strict_types = 1);
+
+require_once 'vendor/autoload.php';
+
+use drupol\phpvfs\Node\Directory;
+use drupol\phpvfs\Node\File;
+
+$root = Directory::create('/');
+
+$files = [
+    File::create('/a/b/c/d/foo.txt', 'foo'),
+    File::create('/a/b/c/d/bar.txt', 'foo'),
+    File::create('/a/file_in_a_dir.txt', 'foo'),
+    File::create('/a/b/file_in_b_dir.txt', 'foo'),
+    File::create('/a/b/c/v/g/file_in_dir.txt', 'foo'),
+    File::create('/tmp/tmp.txt', 'foo'),
+];
+
+$root->add(...$files);
 ```
 
 ## Objects
