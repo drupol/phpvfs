@@ -21,6 +21,6 @@ class AttributeAscii extends Ascii
      */
     protected function getNodeRepresentation(NodeInterface $node): string
     {
-        return $node->getPath()->__toString();
+        return $node->getAttribute('label');
     }
 }
