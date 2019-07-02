@@ -3,7 +3,8 @@
     "type": "library",
     "description": "An implementation of virtual file system and its stream wrapper in PHP.",
     "keywords": [
-        "virtual filesystem"
+        "virtual filesystem",
+        "streamwrapper"
     ],
     "license": "MIT",
     "authors": [
@@ -17,20 +18,16 @@
         "drupol/phptree": "^2.4"
     },
     "require-dev": {
-        "drupol/launcher": "^1.1",
+        "drupol/launcher": "^1 || ^2",
         "drupol/php-conventions": "^1",
         "drupol/phpspec-annotation": "^1",
-        "infection/infection": "^0.12",
+        "infection/infection": "^0.13",
         "leanphp/phpspec-code-coverage": "^4",
-        "phpbench/phpbench": "^0.16",
         "phpspec/phpspec": "^4",
         "phptaskman/changelog": "^1.0",
         "scrutinizer/ocular": "^1"
     },
     "config": {
-        "platform": {
-            "php": "7.1.28"
-        },
         "sort-packages": true
     },
     "autoload": {
