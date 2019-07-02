@@ -181,8 +181,8 @@ class Path implements PathInterface, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    protected function getFragments(): array
+    private function getFragments(): array
     {
-        return \array_filter($this->fragments);
+        return $this->fragments;
     }
 }

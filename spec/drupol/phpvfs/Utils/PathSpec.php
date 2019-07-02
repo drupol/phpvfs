@@ -9,6 +9,45 @@ use PhpSpec\ObjectBehavior;
 
 class PathSpec extends ObjectBehavior
 {
+    public function it_can_be_constructed_with_a_path_trailing_slashes()
+    {
+        $this->beConstructedThrough('fromString', ['phpvfs://a/b/c/d/']);
+
+        $this
+            ->getScheme()
+            ->shouldReturn('phpvfs');
+
+        $this
+            ->basename()
+            ->shouldReturn('d');
+
+        $this
+            ->dirname()
+            ->shouldReturn('phpvfs://a/b/c');
+
+        $this
+            ->isAbsolute()
+            ->shouldReturn(true);
+
+        $this
+            ->getLastPart()
+            ->shouldReturn('d');
+
+        $this
+            ->getFirstPart()
+            ->shouldReturn('a');
+
+        $this
+            ->isRoot()
+            ->shouldReturn(false);
+
+        $this
+            ->isValid()
+            ->shouldReturn(true);
+
+        $this
+            ->shift();
+    }
     public function it_can_be_constructed_with_path_having_scheme()
     {
         $this->beConstructedThrough('fromString', ['phpvfs://a/b/c/foo.txt']);
