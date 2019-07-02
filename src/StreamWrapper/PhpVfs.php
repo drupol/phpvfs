@@ -198,6 +198,10 @@ class PhpVfs implements StreamWrapperInterface
     {
         $modeSplit = \str_split(\str_replace('b', '', $mode));
 
+        $resource = Path::fromString($resource)
+            ->withScheme(null)
+            ->__toString();
+
         $appendMode = \in_array('a', $modeSplit, true);
         $readMode = \in_array('r', $modeSplit, true);
         $writeMode = \in_array('w', $modeSplit, true);

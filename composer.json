@@ -17,6 +17,7 @@
         "drupol/phptree": "^2.4"
     },
     "require-dev": {
+        "drupol/launcher": "^1.1",
         "drupol/php-conventions": "^1",
         "drupol/phpspec-annotation": "^1",
         "infection/infection": "^0.12",

@@ -34,8 +34,10 @@ require_once 'vendor/autoload.php';
 
 use drupol\phpvfs\Exporter\AttributeAscii;
 use drupol\phpvfs\Filesystem\Filesystem;
+use drupol\phpvfs\Exporter\GvDisplayFilesystem;
 use drupol\phpvfs\StreamWrapper\PhpVfs;
 use drupol\phpvfs\Node\Directory;
+use drupol\launcher\Launcher;
 
 // Create directory container.
 $root = Directory::create('/');
@@ -57,17 +59,23 @@ $file = \fopen('phpvfs://foo.txt', 'w');
 
 // Create a directory.
 $vfs
-  ->getCwd()
-  ->mkdir('/a/b/c');
+    ->getCwd()
+    ->mkdir('/a/b/c');
 
 // Move the file.
 rename('phpvfs://foo.txt', 'phpvfs://a/b/c/bar.txt');
 
 // Get the content of the file.
-file_get_contents('phpvfs://a/b/c/bar.txt'); // returns 'bar'
+$test = file_get_contents('phpvfs://a/b/c/bar.txt'); // returns 'bar'
 
 // Export the filesystem into an ascii tree.
 echo (new AttributeAscii())->export($vfs->root());
+
+// Export the filesystem into an image and display it.
+// In order to display the image, you need the package drupol/launcher
+// composer require drupol/launcher
+$exporter = new GvDisplayFilesystem();
+Launcher::open($exporter->setFormat('svg')->export($root));
 ```
 
 ### Using simple directories structure
@@ -79,6 +87,8 @@ declare(strict_types = 1);
 
 require_once 'vendor/autoload.php';
 
+use drupol\launcher\Launcher;
+use drupol\phpvfs\Exporter\GvDisplayFilesystem;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\File;
 
@@ -94,6 +104,12 @@ $files = [
 ];
 
 $root->add(...$files);
+
+// Export the filesystem into an image and display it.
+// In order to display the image, you need the package drupol/launcher
+// composer require drupol/launcher
+$exporter = new GvDisplayFilesystem();
+Launcher::open($exporter->setFormat('svg')->export($root));
 ```
 
 ## Objects

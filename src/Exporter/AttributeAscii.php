@@ -6,15 +6,15 @@ namespace drupol\phpvfs\Exporter;
 
 use drupol\phptree\Exporter\Ascii;
 use drupol\phptree\Node\NodeInterface;
-use drupol\phpvfs\Node\FilesystemNodeInterface;
 
 /**
  * Class AttributeAscii.
  */
 class AttributeAscii extends Ascii
 {
+
     /**
-     * @param FilesystemNodeInterface $node
+     * @param \drupol\phptree\Node\NodeInterface $node
      *   The node.
      *
      * @return string

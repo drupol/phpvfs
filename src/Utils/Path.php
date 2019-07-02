@@ -62,6 +62,11 @@ class Path implements PathInterface, \IteratorAggregate
         $instance = new self();
 
         if (false !== $parsed = \parse_url($id)) {
+            $parsed += [
+                'path' => '',
+                'host' => '',
+            ];
+
             if (\array_key_exists('scheme', $parsed)) {
                 $instance->scheme = $parsed['scheme'];
 
