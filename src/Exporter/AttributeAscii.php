@@ -12,9 +12,8 @@ use drupol\phptree\Node\NodeInterface;
  */
 class AttributeAscii extends Ascii
 {
-
     /**
-     * @param \drupol\phptree\Node\NodeInterface $node
+     * @param \drupol\phpvfs\Node\FilesystemNodeInterface $node
      *   The node.
      *
      * @return string
