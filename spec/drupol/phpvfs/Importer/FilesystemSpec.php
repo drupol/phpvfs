@@ -36,4 +36,15 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->shouldHaveType(Filesystem::class);
     }
+
+    public function it_should_throw_an_error()
+    {
+        $this
+            ->shouldThrow(\Exception::class)
+            ->during('import', ['abracadabra']);
+
+        $this
+            ->shouldThrow(\Exception::class)
+            ->during('import', [['wrong argument type']]);
+    }
 }

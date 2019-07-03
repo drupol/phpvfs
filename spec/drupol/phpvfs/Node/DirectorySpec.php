@@ -196,4 +196,13 @@ class DirectorySpec extends ObjectBehavior
     {
         $this->shouldHaveType(Directory::class);
     }
+
+    public function it_should_throw_an_error_when_cd_to_unexistant_directory()
+    {
+        $this->beConstructedThrough('create', ['/a/b/c/d/e']);
+
+        $this
+            ->shouldThrow(\Exception::class)
+            ->during('cd', ['/abracadabra']);
+    }
 }
