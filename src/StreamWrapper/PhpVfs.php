@@ -198,16 +198,13 @@ class PhpVfs implements StreamWrapperInterface
     {
         $modeSplit = \str_split(\str_replace('b', '', $mode));
 
-        $resource = Path::fromString($resource)
-            ->withScheme(null)
-            ->__toString();
-
         $appendMode = \in_array('a', $modeSplit, true);
         $readMode = \in_array('r', $modeSplit, true);
         $writeMode = \in_array('w', $modeSplit, true);
         $extended = \in_array('+', $modeSplit, true);
 
-        $resourcePath = Path::fromString($resource);
+        $resourcePath = Path::fromString($resource)
+            ->withScheme(null);
 
         $resourceExist = $this::fs()->getCwd()->exist($resource);
         $resourceDirnameExist = $this::fs()->getCwd()->exist($resourcePath->dirname());
