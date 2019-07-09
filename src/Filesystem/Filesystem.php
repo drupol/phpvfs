@@ -39,7 +39,7 @@ class Filesystem implements FilesystemInterface
      */
     public function pwd(): string
     {
-        return $this->getCwd()->getPath()->__toString();
+        return (string) $this->getCwd()->getPath();
     }
 
     /**
@@ -47,7 +47,9 @@ class Filesystem implements FilesystemInterface
      */
     public function root(): DirectoryInterface
     {
-        if (($root = $this->getCwd()->root()) instanceof DirectoryInterface) {
+        $root = $this->getCwd()->root();
+
+        if ($root instanceof DirectoryInterface) {
             return $root;
         }
 

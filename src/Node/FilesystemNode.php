@@ -45,7 +45,6 @@ abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInt
      */
     public function add(NodeInterface ...$nodes): NodeInterface
     {
-        /** @var \drupol\phpvfs\Node\FilesystemNodeInterface $node */
         foreach ($nodes as $node) {
             if (!($node instanceof FilesystemNodeInterface)) {
                 throw new \Exception('Invalid filesystem node type.');

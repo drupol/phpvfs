@@ -156,11 +156,11 @@ final class File implements FileInterface
     public function truncate(int $bytes = 0): File
     {
         $this->setPosition($bytes);
-        $newData = \substr($this->getFile()->getAttribute('content'), 0, $bytes);
 
-        if (\is_string($newData)) {
-            $this->getFile()->setAttribute('content', $newData);
-        }
+        $this->getFile()->setAttribute(
+            'content',
+            \substr($this->getFile()->getAttribute('content'), 0, $bytes)
+        );
 
         return $this;
     }

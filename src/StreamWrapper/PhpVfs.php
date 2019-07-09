@@ -250,7 +250,7 @@ class PhpVfs implements StreamWrapperInterface
 
         $this->setCurrentFile($fileHandler);
 
-        $openedPath = $file->getPath()->__toString();
+        $openedPath = (string) $file->getPath();
 
         return true;
     }

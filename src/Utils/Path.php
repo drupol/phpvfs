@@ -43,7 +43,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function basename(): string
     {
-        return \basename($this->__toString());
+        return \basename((string) $this);
     }
 
     /**
@@ -51,7 +51,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function dirname(): string
     {
-        return \dirname($this->__toString());
+        return \dirname((string) $this);
     }
 
     /**

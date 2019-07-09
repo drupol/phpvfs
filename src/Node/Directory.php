@@ -24,7 +24,9 @@ class Directory extends FilesystemNode implements DirectoryInterface
             throw new \Exception(\sprintf('Cannot change directory to %s: No such file or directory.', $id));
         }
 
-        if (($cwd = $this->get($id)) instanceof DirectoryInterface) {
+        $cwd = $this->get($id);
+
+        if ($cwd instanceof DirectoryInterface) {
             return $cwd;
         }
     }
@@ -190,8 +192,9 @@ class Directory extends FilesystemNode implements DirectoryInterface
 
         if (($cwd instanceof DirectoryInterface) && (null !== $parent = $cwd->getParent())) {
             $parent->remove($cwd);
+            $parent = $cwd->getParent();
 
-            if (($parent = $cwd->getParent()) instanceof DirectoryInterface) {
+            if ($parent instanceof DirectoryInterface) {
                 return $parent;
             }
         }

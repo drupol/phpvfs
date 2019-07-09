@@ -6,14 +6,15 @@ namespace drupol\phpvfs\Exporter;
 
 use drupol\phptree\Exporter\Ascii;
 use drupol\phptree\Node\NodeInterface;
+use drupol\phpvfs\Node\FilesystemNodeInterface;
 
 /**
  * Class AttributeAscii.
  */
-class AttributeAscii extends Ascii
+final class AttributeAscii extends Ascii
 {
     /**
-     * @param \drupol\phpvfs\Node\FilesystemNodeInterface $node
+     * @param \drupol\phptree\Node\NodeInterface $node
      *   The node.
      *
      * @return string
@@ -21,6 +22,8 @@ class AttributeAscii extends Ascii
      */
     protected function getNodeRepresentation(NodeInterface $node): string
     {
-        return $node->getAttribute('label');
+        if ($node instanceof FilesystemNodeInterface) {
+            return $node->getAttribute('label');
+        }
     }
 }
