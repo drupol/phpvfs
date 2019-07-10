@@ -9,7 +9,7 @@ use PhpSpec\ObjectBehavior;
 
 class FileSpec extends ObjectBehavior
 {
-    public function it_can_be_todotada()
+    public function it_can_be_constructed_with_a_file_and_some_content()
     {
         $this->beConstructedThrough('create', ['a/b/c/d/e/file.txt', 'content']);
 

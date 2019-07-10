@@ -93,7 +93,7 @@ class Path implements PathInterface, \IteratorAggregate
     {
         $first = \reset($this->fragments);
 
-        return empty($first) ?
+        return false === $first ?
             \DIRECTORY_SEPARATOR :
             $first;
     }
@@ -101,7 +101,7 @@ class Path implements PathInterface, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         yield from $this->getFragments();
     }
@@ -111,7 +111,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function getLastPart(): string
     {
-        if (empty($this->fragments)) {
+        if ([] === $this->fragments) {
             return \DIRECTORY_SEPARATOR;
         }
 
@@ -147,7 +147,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function isValid(): bool
     {
-        if (\preg_match('/^[^*?"<>|:]*$/', \trim((string) $this->withScheme(null), ' /'))) {
+        if (0 !== \preg_match('/^[^*?"<>|:]*$/', \trim((string) $this->withScheme(null), ' /'))) {
             return true;
         }
 
@@ -159,7 +159,7 @@ class Path implements PathInterface, \IteratorAggregate
      */
     public function shift(): string
     {
-        if (empty($this->fragments)) {
+        if ([] === $this->fragments) {
             return \DIRECTORY_SEPARATOR;
         }
 

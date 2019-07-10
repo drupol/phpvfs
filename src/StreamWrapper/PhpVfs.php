@@ -82,7 +82,7 @@ class PhpVfs implements StreamWrapperInterface
     /**
      * {@inheritdoc}
      */
-    public static function register(Filesystem $filesystem, array $options = [])
+    public static function register(Filesystem $filesystem, array $options = []): void
     {
         $options = [
             static::SCHEME => [
@@ -211,7 +211,7 @@ class PhpVfs implements StreamWrapperInterface
 
         if (false === $resourceExist) {
             if (true === $readMode) {
-                if ($options & STREAM_REPORT_ERRORS) {
+                if (0 !== ($options & STREAM_REPORT_ERRORS)) {
                     \trigger_error(
                         \sprintf(
                             '%s: failed to open stream: Unknown resource.',
@@ -232,7 +232,7 @@ class PhpVfs implements StreamWrapperInterface
         $file = $this::fs()->getCwd()->get($resource);
 
         if (!($file instanceof FileInterface)) {
-            if ($options & STREAM_REPORT_ERRORS) {
+            if (0 !== ($options & STREAM_REPORT_ERRORS)) {
                 \trigger_error(\sprintf('fopen(%s): failed to open stream: Not a file.', $resource), E_USER_WARNING);
             }
 
@@ -353,7 +353,7 @@ class PhpVfs implements StreamWrapperInterface
     /**
      * {@inheritdoc}
      */
-    public static function unregister()
+    public static function unregister(): void
     {
         \stream_wrapper_unregister(self::SCHEME);
     }
@@ -381,7 +381,7 @@ class PhpVfs implements StreamWrapperInterface
     /**
      * @param null|\drupol\phpvfs\StreamWrapper\Handler\FileInterface $file
      */
-    private function setCurrentFile(?Handler\FileInterface $file)
+    private function setCurrentFile(?Handler\FileInterface $file): void
     {
         $options = \stream_context_get_options(
             \stream_context_get_default()
