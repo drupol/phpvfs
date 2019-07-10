@@ -7,7 +7,7 @@ namespace drupol\phpvfs\Utils;
 /**
  * Class Path.
  */
-class Path implements PathInterface, \IteratorAggregate
+class Path implements \IteratorAggregate, PathInterface
 {
     /**
      * @var bool
@@ -74,7 +74,7 @@ class Path implements PathInterface, \IteratorAggregate
             }
         }
 
-        $instance->absolute = 0 === \strpos($id, '/');
+        $instance->absolute = 0 === \mb_strpos($id, '/');
 
         $instance->fragments = \array_filter(
             \explode(

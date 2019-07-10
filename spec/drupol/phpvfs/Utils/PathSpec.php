@@ -48,6 +48,7 @@ class PathSpec extends ObjectBehavior
         $this
             ->shift();
     }
+
     public function it_can_be_constructed_with_path_having_scheme()
     {
         $this->beConstructedThrough('fromString', ['phpvfs://a/b/c/foo.txt']);

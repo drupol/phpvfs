@@ -7,8 +7,8 @@ namespace spec\drupol\phpvfs\StreamWrapper;
 use drupol\phpvfs\Filesystem\Filesystem;
 use drupol\phpvfs\Node\Directory;
 use drupol\phpvfs\Node\DirectoryInterface;
-use drupol\phpvfs\Node\FileInterface;
 use drupol\phpvfs\Node\File;
+use drupol\phpvfs\Node\FileInterface;
 use drupol\phpvfs\StreamWrapper\PhpVfs;
 use PhpSpec\ObjectBehavior;
 
@@ -21,7 +21,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         \fwrite($file, 'bar');
         \fclose($file);
 
@@ -40,7 +40,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'r');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
         $content = \fread($file, 1000);
 
         $this
@@ -69,7 +69,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         \fwrite($file, 'bar');
         \fclose($file);
 
@@ -91,7 +91,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         \fwrite($file, 'bar');
 
         $this
@@ -110,7 +110,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->get('/a/b/c/d/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'r');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
         \fwrite($file, 'foo');
         \fclose($file);
     }
@@ -122,7 +122,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         \fwrite($file, 'bar');
         \fclose($file);
 
@@ -160,7 +160,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'r');
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
 
         $this
             ->stream_seek(2)
@@ -180,7 +180,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'r');
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
         \ftruncate($fileHandler, 2);
         \rewind($fileHandler);
 
@@ -224,7 +224,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         \fwrite($fileHandler, 'bar');
         \fclose($fileHandler);
 
@@ -233,7 +233,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->shouldReturn([]);
 
         // @wtf: If you remove $fileHandler, the test fails.
-        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         $this
             ->stream_stat()
             ->shouldReturn((array) $file->getAttributes());
@@ -269,6 +269,7 @@ class PhpVfsSpec extends ObjectBehavior
     {
         $this->shouldHaveType(PhpVfs::class);
     }
+
     public function let()
     {
         $vfs = new Filesystem(Directory::create('/'));

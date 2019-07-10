@@ -60,7 +60,7 @@ class Directory extends FilesystemNode implements DirectoryInterface
     {
         $path = Path::fromString($id);
 
-        if (\DIRECTORY_SEPARATOR !== $id && false !== \strpos($id, \DIRECTORY_SEPARATOR)) {
+        if (\DIRECTORY_SEPARATOR !== $id && false !== \mb_strpos($id, \DIRECTORY_SEPARATOR)) {
             if ($path->isAbsolute()) {
                 $firstPart = \DIRECTORY_SEPARATOR;
             } else {

@@ -15,6 +15,7 @@ interface DirectoryInterface extends FilesystemNodeInterface
      * @return \drupol\phpvfs\Node\DirectoryInterface
      */
     public function cd(string $name): DirectoryInterface;
+
     /**
      * @param string $id
      *

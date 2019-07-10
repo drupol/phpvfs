@@ -211,13 +211,13 @@ class PhpVfs implements StreamWrapperInterface
 
         if (false === $resourceExist) {
             if (true === $readMode) {
-                if (0 !== ($options & STREAM_REPORT_ERRORS)) {
+                if (0 !== ($options & \STREAM_REPORT_ERRORS)) {
                     \trigger_error(
                         \sprintf(
                             '%s: failed to open stream: Unknown resource.',
                             $resourcePath
                         ),
-                        E_USER_WARNING
+                        \E_USER_WARNING
                     );
                 }
 
@@ -232,8 +232,8 @@ class PhpVfs implements StreamWrapperInterface
         $file = $this::fs()->getCwd()->get($resource);
 
         if (!($file instanceof FileInterface)) {
-            if (0 !== ($options & STREAM_REPORT_ERRORS)) {
-                \trigger_error(\sprintf('fopen(%s): failed to open stream: Not a file.', $resource), E_USER_WARNING);
+            if (0 !== ($options & \STREAM_REPORT_ERRORS)) {
+                \trigger_error(\sprintf('fopen(%s): failed to open stream: Not a file.', $resource), \E_USER_WARNING);
             }
 
             return false;
@@ -270,7 +270,7 @@ class PhpVfs implements StreamWrapperInterface
     /**
      * {@inheritdoc}
      */
-    public function stream_seek(int $offset, int $whence = SEEK_SET): bool // phpcs:ignore
+    public function stream_seek(int $offset, int $whence = \SEEK_SET): bool // phpcs:ignore
     {
         if (($file = $this->getCurrentFile()) instanceof Handler\File) {
             $file->setPosition($offset);

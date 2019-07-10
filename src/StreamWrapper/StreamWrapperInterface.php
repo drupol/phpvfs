@@ -128,7 +128,7 @@ interface StreamWrapperInterface
      *
      * @see http://php.net/streamwrapper.stream-seek
      */
-    public function stream_seek(int $offset, int $whence = SEEK_SET): bool; // phpcs:ignore
+    public function stream_seek(int $offset, int $whence = \SEEK_SET): bool; // phpcs:ignore
 
     /**
      * @param int $option
