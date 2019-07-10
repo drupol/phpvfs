@@ -24,7 +24,6 @@
         "drupol/phpspec-code-coverage": "^4 || ^5",
         "infection/infection": "^0.13",
         "phpspec/phpspec": "^4 || ^5",
-        "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan-strict-rules": "^0.11.1",
         "phptaskman/changelog": "^1.0",
         "scrutinizer/ocular": "^1"
