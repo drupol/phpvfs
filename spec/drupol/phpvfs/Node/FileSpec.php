@@ -9,7 +9,7 @@ use PhpSpec\ObjectBehavior;
 
 class FileSpec extends ObjectBehavior
 {
-    public function it_can_be_constructed_with_a_file_and_some_content()
+    public function it_can_be_constructed_with_a_file_and_some_content(): void
     {
         $this->beConstructedThrough('create', ['a/b/c/d/e/file.txt', 'content']);
 
@@ -47,7 +47,7 @@ class FileSpec extends ObjectBehavior
             ->shouldReturn(6);
     }
 
-    public function it_can_be_written()
+    public function it_can_be_written(): void
     {
         $this->beConstructedThrough('create', ['/a/b/file.txt']);
 
@@ -69,7 +69,7 @@ class FileSpec extends ObjectBehavior
             ->shouldReturn('content');
     }
 
-    public function it_get_its_path()
+    public function it_get_its_path(): void
     {
         $this->beConstructedThrough('create', ['/a/b/file.txt']);
 
@@ -84,7 +84,7 @@ class FileSpec extends ObjectBehavior
             ->shouldReturn(true);
     }
 
-    public function it_is_initializable()
+    public function it_is_initializable(): void
     {
         $this->shouldHaveType(File::class);
     }

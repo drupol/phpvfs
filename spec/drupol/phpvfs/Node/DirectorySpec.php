@@ -13,7 +13,7 @@ use PhpSpec\ObjectBehavior;
 
 class DirectorySpec extends ObjectBehavior
 {
-    public function it_can_add_other_nodes_type()
+    public function it_can_add_other_nodes_type(): void
     {
         $this->beConstructedThrough('create', ['a/b/c/d/e']);
 
@@ -58,7 +58,7 @@ class DirectorySpec extends ObjectBehavior
             ->during('add', [$differentNodeTypeNotExtendingVfs]);
     }
 
-    public function it_can_change_directory()
+    public function it_can_change_directory(): void
     {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
@@ -90,7 +90,7 @@ class DirectorySpec extends ObjectBehavior
             ->shouldBe('/');
     }
 
-    public function it_can_get_a_subdirectory()
+    public function it_can_get_a_subdirectory(): void
     {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
@@ -122,7 +122,7 @@ class DirectorySpec extends ObjectBehavior
             ->shouldBeAnInstanceOf(FileInterface::class);
     }
 
-    public function it_can_remove_directory_absolute()
+    public function it_can_remove_directory_absolute(): void
     {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
@@ -139,7 +139,7 @@ class DirectorySpec extends ObjectBehavior
             ->shouldReturn(0);
     }
 
-    public function it_can_remove_directory_containing_files()
+    public function it_can_remove_directory_containing_files(): void
     {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
@@ -159,7 +159,7 @@ class DirectorySpec extends ObjectBehavior
             ->shouldBeAnInstanceOf(FileInterface::class);
     }
 
-    public function it_can_remove_directory_relative()
+    public function it_can_remove_directory_relative(): void
     {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 
@@ -192,12 +192,12 @@ class DirectorySpec extends ObjectBehavior
             ->shouldBeNull();
     }
 
-    public function it_is_initializable()
+    public function it_is_initializable(): void
     {
         $this->shouldHaveType(Directory::class);
     }
 
-    public function it_should_throw_an_error_when_cd_to_unexistant_directory()
+    public function it_should_throw_an_error_when_cd_to_unexistant_directory(): void
     {
         $this->beConstructedThrough('create', ['/a/b/c/d/e']);
 

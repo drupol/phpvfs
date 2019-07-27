@@ -14,7 +14,7 @@ interface DirectoryInterface extends FilesystemNodeInterface
      *
      * @return \drupol\phpvfs\Node\DirectoryInterface
      */
-    public function cd(string $name): DirectoryInterface;
+    public function cd(string $name): self;
 
     /**
      * @param string $id
@@ -49,5 +49,5 @@ interface DirectoryInterface extends FilesystemNodeInterface
      *
      * @return \drupol\phpvfs\Node\DirectoryInterface
      */
-    public function rmdir(string $name): DirectoryInterface;
+    public function rmdir(string $name): self;
 }

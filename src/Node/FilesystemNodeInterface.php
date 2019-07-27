@@ -20,5 +20,5 @@ interface FilesystemNodeInterface extends AttributeNodeInterface
     /**
      * @return \drupol\phpvfs\Node\FilesystemNodeInterface
      */
-    public function root(): FilesystemNodeInterface;
+    public function root(): self;
 }

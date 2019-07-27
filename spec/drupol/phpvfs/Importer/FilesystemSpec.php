@@ -10,7 +10,7 @@ use PhpSpec\ObjectBehavior;
 
 class FilesystemSpec extends ObjectBehavior
 {
-    public function it_can_import_a_real_filesystem()
+    public function it_can_import_a_real_filesystem(): void
     {
         $this
             ->import(__DIR__)
@@ -32,12 +32,12 @@ class FilesystemSpec extends ObjectBehavior
             ->shouldBe('square');
     }
 
-    public function it_is_initializable()
+    public function it_is_initializable(): void
     {
         $this->shouldHaveType(Filesystem::class);
     }
 
-    public function it_should_throw_an_error()
+    public function it_should_throw_an_error(): void
     {
         $this
             ->shouldThrow(\Exception::class)

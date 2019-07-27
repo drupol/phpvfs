@@ -9,7 +9,7 @@ use PhpSpec\ObjectBehavior;
 
 class PathSpec extends ObjectBehavior
 {
-    public function it_can_be_constructed_with_a_path_trailing_slashes()
+    public function it_can_be_constructed_with_a_path_trailing_slashes(): void
     {
         $this->beConstructedThrough('fromString', ['phpvfs://a/b/c/d/']);
 
@@ -49,7 +49,7 @@ class PathSpec extends ObjectBehavior
             ->shift();
     }
 
-    public function it_can_be_constructed_with_path_having_scheme()
+    public function it_can_be_constructed_with_path_having_scheme(): void
     {
         $this->beConstructedThrough('fromString', ['phpvfs://a/b/c/foo.txt']);
 
@@ -89,7 +89,7 @@ class PathSpec extends ObjectBehavior
             ->shift();
     }
 
-    public function it_can_be_created_with_a_simple_root_dir()
+    public function it_can_be_created_with_a_simple_root_dir(): void
     {
         $this->beConstructedThrough('fromString', ['/']);
 
@@ -126,7 +126,7 @@ class PathSpec extends ObjectBehavior
             ->shouldReturn(true);
     }
 
-    public function it_can_be_created_with_an_absolute_path()
+    public function it_can_be_created_with_an_absolute_path(): void
     {
         $this->beConstructedThrough('fromString', ['/a/b/c/foo.txt']);
 
@@ -187,7 +187,7 @@ class PathSpec extends ObjectBehavior
             ->shouldReturn('/');
     }
 
-    public function it_can_detect_if_a_path_is_valid_or_not()
+    public function it_can_detect_if_a_path_is_valid_or_not(): void
     {
         $this->beConstructedThrough('fromString', ['/ij \lkjf \o k/ kjdf/ lkjd/-lkj"+']);
 
@@ -196,7 +196,7 @@ class PathSpec extends ObjectBehavior
             ->shouldReturn(false);
     }
 
-    public function it_can_detect_if_a_path_with_scheme_is_valid_or_not()
+    public function it_can_detect_if_a_path_with_scheme_is_valid_or_not(): void
     {
         $this->beConstructedThrough('fromString', ['phpvfs://// lkjd/-lkj"+']);
 
@@ -205,7 +205,7 @@ class PathSpec extends ObjectBehavior
             ->shouldReturn(false);
     }
 
-    public function it_can_return_a_clone_with_another_scheme()
+    public function it_can_return_a_clone_with_another_scheme(): void
     {
         $this->beConstructedThrough('fromString', ['/a/b/c/foo.txt']);
 
@@ -225,7 +225,7 @@ class PathSpec extends ObjectBehavior
             ->shouldReturn('/a/b/c/foo.txt');
     }
 
-    public function it_is_initializable()
+    public function it_is_initializable(): void
     {
         $this->shouldHaveType(Path::class);
     }

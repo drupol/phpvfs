@@ -9,7 +9,7 @@ use PhpSpec\ObjectBehavior;
 
 class FileSpec extends ObjectBehavior
 {
-    public function it_is_initializable()
+    public function it_is_initializable(): void
     {
         $file = \drupol\phpvfs\Node\File::create('foo.txt', 'barbaz');
 

@@ -19,5 +19,5 @@ interface FileInterface extends FilesystemNodeInterface
      *
      * @return \drupol\phpvfs\Node\FileInterface
      */
-    public function write(string $data): FileInterface;
+    public function write(string $data): self;
 }

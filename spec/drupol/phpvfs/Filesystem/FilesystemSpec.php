@@ -11,7 +11,7 @@ use PhpSpec\ObjectBehavior;
 
 class FilesystemSpec extends ObjectBehavior
 {
-    public function it_can_be_created_with_more_directories()
+    public function it_can_be_created_with_more_directories(): void
     {
         $this->beConstructedWith(Directory::create('/a/b/c/d'));
 
@@ -30,7 +30,7 @@ class FilesystemSpec extends ObjectBehavior
             ->shouldReturn('/a/b/c/d');
     }
 
-    public function it_can_be_created_with_root_only()
+    public function it_can_be_created_with_root_only(): void
     {
         $this->beConstructedWith(Directory::create('/'));
 
@@ -44,7 +44,7 @@ class FilesystemSpec extends ObjectBehavior
             ->shouldReturn('/');
     }
 
-    public function it_can_change_directory()
+    public function it_can_change_directory(): void
     {
         $this->beConstructedWith(Directory::create('/a/b/c/d'));
 
@@ -58,7 +58,7 @@ class FilesystemSpec extends ObjectBehavior
             ->shouldReturn('/a/b/c/d');
     }
 
-    public function it_can_set_and_get_its_cwd()
+    public function it_can_set_and_get_its_cwd(): void
     {
         $this->beConstructedWith(Directory::create('/a/b/c/d'));
 
@@ -85,7 +85,7 @@ class FilesystemSpec extends ObjectBehavior
             ->shouldReturn('/a/b/c');
     }
 
-    public function it_is_initializable()
+    public function it_is_initializable(): void
     {
         $this->beConstructedWith(Directory::create('/'));
 

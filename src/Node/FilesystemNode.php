@@ -23,11 +23,11 @@ abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInt
         array $attributes = [],
         ?int $capacity = 0
     ) {
-        $time = \time();
+        $time = time();
 
         $attributes = [
-            'uid' => \function_exists('posix_getuid') ? \posix_getuid() : 0,
-            'gid' => \function_exists('posix_getgid') ? \posix_getgid() : 0,
+            'uid' => \function_exists('posix_getuid') ? posix_getuid() : 0,
+            'gid' => \function_exists('posix_getgid') ? posix_getgid() : 0,
             'atime' => $time,
             'mtime' => $time,
             'ctime' => $time,
@@ -83,10 +83,10 @@ abstract class FilesystemNode extends AttributeNode implements FilesystemNodeInt
         ];
 
         foreach ($this->getAncestors() as $ancestor) {
-            \array_unshift($paths, $ancestor->getAttribute('id'));
+            array_unshift($paths, $ancestor->getAttribute('id'));
         }
 
-        return Path::fromString(\str_replace('//', '/', \implode('/', $paths)));
+        return Path::fromString(str_replace('//', '/', implode('/', $paths)));
     }
 
     /**
