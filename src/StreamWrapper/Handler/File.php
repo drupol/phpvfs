@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace drupol\phpvfs\StreamWrapper\Handler;
 
@@ -71,7 +71,7 @@ final class File implements FileInterface
      */
     public function isAppendable(): bool
     {
-        $modeSplit = str_split(str_replace('b', '', $this->getMode()));
+        $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
 
         return \in_array('a', $modeSplit, true);
     }
@@ -81,7 +81,7 @@ final class File implements FileInterface
      */
     public function isExtended(): bool
     {
-        $modeSplit = str_split(str_replace('b', '', $this->getMode()));
+        $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
 
         return \in_array('+', $modeSplit, true);
     }
@@ -91,7 +91,7 @@ final class File implements FileInterface
      */
     public function isReadable(): bool
     {
-        $modeSplit = str_split(str_replace('b', '', $this->getMode()));
+        $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
 
         return \in_array('r', $modeSplit, true);
     }
@@ -101,7 +101,7 @@ final class File implements FileInterface
      */
     public function isWritable(): bool
     {
-        $modeSplit = str_split(str_replace('b', '', $this->getMode()));
+        $modeSplit = \str_split(\str_replace('b', '', $this->getMode()));
 
         return \in_array('w', $modeSplit, true);
     }
@@ -111,7 +111,7 @@ final class File implements FileInterface
      */
     public function read(int $bytes): string
     {
-        $data = mb_substr(
+        $data = \mb_substr(
             $this->getFile()->getAttribute('content'),
             $this->getPosition(),
             $bytes
@@ -128,7 +128,7 @@ final class File implements FileInterface
     public function seekToEnd()
     {
         return $this->setPosition(
-            mb_strlen($this->getFile()->getAttribute('content'))
+            \mb_strlen($this->getFile()->getAttribute('content'))
         );
     }
 
@@ -147,7 +147,7 @@ final class File implements FileInterface
      */
     public function size(): int
     {
-        return mb_strlen($this->getFile()->getAttribute('content'));
+        return \mb_strlen($this->getFile()->getAttribute('content'));
     }
 
     /**
@@ -159,7 +159,7 @@ final class File implements FileInterface
 
         $this->getFile()->setAttribute(
             'content',
-            mb_substr($this->getFile()->getAttribute('content'), 0, $bytes)
+            \mb_substr($this->getFile()->getAttribute('content'), 0, $bytes)
         );
 
         return $this;
@@ -171,12 +171,12 @@ final class File implements FileInterface
     public function write(string $data): int
     {
         $content = $this->getFile()->getAttribute('content');
-        $content = mb_substr($content, 0, $this->getPosition());
+        $content = \mb_substr($content, 0, $this->getPosition());
 
         $content .= $data;
         $this->getFile()->setAttribute('content', $content);
 
-        $written = mb_strlen($data);
+        $written = \mb_strlen($data);
         $this->offsetPosition($written);
 
         return $written;

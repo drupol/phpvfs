@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace drupol\phpvfs\Utils;
 
@@ -35,7 +35,7 @@ class Path implements \IteratorAggregate, PathInterface
             $root = $this->isAbsolute() ? '/' : '';
         }
 
-        return $root . implode('/', $this->getFragments());
+        return $root . \implode('/', $this->getFragments());
     }
 
     /**
@@ -43,7 +43,7 @@ class Path implements \IteratorAggregate, PathInterface
      */
     public function basename(): string
     {
-        return basename((string) $this);
+        return \basename((string) $this);
     }
 
     /**
@@ -61,7 +61,7 @@ class Path implements \IteratorAggregate, PathInterface
     {
         $instance = new self();
 
-        if (false !== $parsed = parse_url($id)) {
+        if (false !== $parsed = \parse_url($id)) {
             $parsed += [
                 'path' => '',
                 'host' => '',
@@ -74,12 +74,12 @@ class Path implements \IteratorAggregate, PathInterface
             }
         }
 
-        $instance->absolute = 0 === mb_strpos($id, '/');
+        $instance->absolute = 0 === \mb_strpos($id, '/');
 
-        $instance->fragments = array_filter(
-            explode(
+        $instance->fragments = \array_filter(
+            \explode(
                 \DIRECTORY_SEPARATOR,
-                ltrim($id, \DIRECTORY_SEPARATOR)
+                \ltrim($id, \DIRECTORY_SEPARATOR)
             )
         );
 
@@ -91,7 +91,7 @@ class Path implements \IteratorAggregate, PathInterface
      */
     public function getFirstPart(): string
     {
-        $first = reset($this->fragments);
+        $first = \reset($this->fragments);
 
         return false === $first ?
             \DIRECTORY_SEPARATOR :
@@ -115,7 +115,7 @@ class Path implements \IteratorAggregate, PathInterface
             return \DIRECTORY_SEPARATOR;
         }
 
-        return end($this->fragments);
+        return \end($this->fragments);
     }
 
     /**
@@ -147,7 +147,7 @@ class Path implements \IteratorAggregate, PathInterface
      */
     public function isValid(): bool
     {
-        if (0 !== preg_match('/^[^*?"<>|:]*$/', trim((string) $this->withScheme(null), ' /'))) {
+        if (0 !== \preg_match('/^[^*?"<>|:]*$/', \trim((string) $this->withScheme(null), ' /'))) {
             return true;
         }
 
@@ -163,7 +163,7 @@ class Path implements \IteratorAggregate, PathInterface
             return \DIRECTORY_SEPARATOR;
         }
 
-        return array_shift($this->fragments);
+        return \array_shift($this->fragments);
     }
 
     /**

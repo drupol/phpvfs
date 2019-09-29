@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace spec\drupol\phpvfs\StreamWrapper;
 
@@ -21,11 +21,11 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = fopen('phpvfs://a/b/c/d/foo.txt', 'w');
-        fwrite($file, 'bar');
-        fclose($file);
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
+        \fwrite($file, 'bar');
+        \fclose($file);
 
-        unlink('phpvfs://a/b/c/d/foo.txt');
+        \unlink('phpvfs://a/b/c/d/foo.txt');
 
         $this::fs()
             ->getCwd()
@@ -40,14 +40,14 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = fopen('phpvfs://a/b/c/d/foo.txt', 'r');
-        $content = fread($file, 1000);
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
+        $content = \fread($file, 1000);
 
         $this
             ->stream_eof()
             ->shouldReturn(true);
 
-        fclose($file);
+        \fclose($file);
     }
 
     public function it_can_flush(): void
@@ -69,9 +69,9 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = fopen('phpvfs://a/b/c/d/foo.txt', 'w');
-        fwrite($file, 'bar');
-        fclose($file);
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
+        \fwrite($file, 'bar');
+        \fclose($file);
 
         $this::fs()
             ->getCwd()
@@ -91,14 +91,14 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = fopen('phpvfs://a/b/c/d/foo.txt', 'w');
-        fwrite($file, 'bar');
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
+        \fwrite($file, 'bar');
 
         $this
             ->stream_eof()
             ->shouldReturn(true);
 
-        fclose($file);
+        \fclose($file);
 
         $this::fs()
             ->getCwd()
@@ -110,9 +110,9 @@ class PhpVfsSpec extends ObjectBehavior
             ->get('/a/b/c/d/foo.txt')
             ->shouldBeAnInstanceOf(FileInterface::class);
 
-        $file = fopen('phpvfs://a/b/c/d/foo.txt', 'r');
-        fwrite($file, 'foo');
-        fclose($file);
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
+        \fwrite($file, 'foo');
+        \fclose($file);
     }
 
     public function it_can_rename_a_file(): void
@@ -122,9 +122,9 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $file = fopen('phpvfs://a/b/c/d/foo.txt', 'w');
-        fwrite($file, 'bar');
-        fclose($file);
+        $file = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
+        \fwrite($file, 'bar');
+        \fclose($file);
 
         $this::fs()
             ->getCwd()
@@ -132,7 +132,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->read(8192)
             ->shouldReturn('bar');
 
-        rename('phpvfs://a/b/c/d/foo.txt', 'phpvfs://d/e/f/g/bar.baz');
+        \rename('phpvfs://a/b/c/d/foo.txt', 'phpvfs://d/e/f/g/bar.baz');
 
         $this::fs()
             ->getCwd()
@@ -160,7 +160,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $fileHandler = fopen('phpvfs://a/b/c/d/foo.txt', 'r');
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
 
         $this
             ->stream_seek(2)
@@ -170,7 +170,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->stream_read(1)
             ->shouldReturn('c');
 
-        fclose($fileHandler);
+        \fclose($fileHandler);
     }
 
     public function it_can_truncate(): void
@@ -180,19 +180,19 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $fileHandler = fopen('phpvfs://a/b/c/d/foo.txt', 'r');
-        ftruncate($fileHandler, 2);
-        rewind($fileHandler);
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'rb');
+        \ftruncate($fileHandler, 2);
+        \rewind($fileHandler);
 
-        $content = fread($fileHandler, 1000);
+        $content = \fread($fileHandler, 1000);
 
-        rewind($fileHandler);
+        \rewind($fileHandler);
 
         $this
             ->stream_read(1000)
             ->shouldReturn($content);
 
-        rewind($fileHandler);
+        \rewind($fileHandler);
 
         $this
             ->stream_read(1000)
@@ -202,19 +202,19 @@ class PhpVfsSpec extends ObjectBehavior
             ->stream_eof()
             ->shouldReturn(true);
 
-        ftruncate($fileHandler, 0);
+        \ftruncate($fileHandler, 0);
 
         $this
             ->stream_eof()
             ->shouldReturn(true);
 
-        rewind($fileHandler);
+        \rewind($fileHandler);
 
         $this
             ->stream_read(1000)
             ->shouldReturn('');
 
-        fclose($fileHandler);
+        \fclose($fileHandler);
     }
 
     public function it_can_use_stream_stat(): void
@@ -224,16 +224,16 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        $fileHandler = fopen('phpvfs://a/b/c/d/foo.txt', 'w');
-        fwrite($fileHandler, 'bar');
-        fclose($fileHandler);
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
+        \fwrite($fileHandler, 'bar');
+        \fclose($fileHandler);
 
         $this
             ->stream_stat()
             ->shouldReturn([]);
 
         // @wtf: If you remove $fileHandler, the test fails.
-        $fileHandler = fopen('phpvfs://a/b/c/d/foo.txt', 'w');
+        $fileHandler = \fopen('phpvfs://a/b/c/d/foo.txt', 'wb');
         $this
             ->stream_stat()
             ->shouldReturn((array) $file->getAttributes());
@@ -246,7 +246,7 @@ class PhpVfsSpec extends ObjectBehavior
             ->getCwd()
             ->add($file);
 
-        rmdir('phpvfs://a/b/c/d');
+        \rmdir('phpvfs://a/b/c/d');
 
         $this::fs()
             ->getCwd()

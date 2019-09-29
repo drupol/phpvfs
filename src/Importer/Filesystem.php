@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace drupol\phpvfs\Importer;
 
@@ -33,7 +33,7 @@ class Filesystem implements ImporterInterface
             throw new \Exception('Must be a string.');
         }
 
-        if (!file_exists($data)) {
+        if (!\file_exists($data)) {
             throw new \Exception('The directory doesn\'t exist.');
         }
 
@@ -59,7 +59,7 @@ class Filesystem implements ImporterInterface
         $label = Path::fromString($data)->getLastPart();
         $shape = 'square';
 
-        if (is_file($data)) {
+        if (\is_file($data)) {
             $node = new File();
             $label = Path::fromString($data)->basename();
             $shape = 'circle';
@@ -88,7 +88,7 @@ class Filesystem implements ImporterInterface
 
         $node = $this->createNode($data['name']);
 
-        $children = array_map(
+        $children = \array_map(
             [$this, 'arrayToTree'],
             $data['children']
         );
@@ -105,8 +105,8 @@ class Filesystem implements ImporterInterface
     {
         $children = [];
 
-        if (false !== $items = glob($directory . '/*')) {
-            $children = array_map(
+        if (false !== $items = \glob($directory . '/*')) {
+            $children = \array_map(
                 [$this, 'doImport'],
                 $items
             );

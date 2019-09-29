@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace drupol\phpvfs\StreamWrapper;
 
@@ -64,8 +64,8 @@ class PhpVfs implements StreamWrapperInterface
      */
     public static function fs(): FilesystemInterface
     {
-        $options = stream_context_get_options(
-            stream_context_get_default()
+        $options = \stream_context_get_options(
+            \stream_context_get_default()
         );
 
         return $options[static::SCHEME]['filesystem'];
@@ -91,8 +91,8 @@ class PhpVfs implements StreamWrapperInterface
             ] + $options,
         ];
 
-        stream_context_set_default($options);
-        stream_wrapper_register(self::SCHEME, __CLASS__);
+        \stream_context_set_default($options);
+        \stream_wrapper_register(self::SCHEME, __CLASS__);
     }
 
     /**
@@ -180,7 +180,7 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function stream_flush(): bool // phpcs:ignore
     {
-        clearstatcache();
+        \clearstatcache();
 
         return true;
     }
@@ -198,7 +198,7 @@ class PhpVfs implements StreamWrapperInterface
      */
     public function stream_open(string $resource, string $mode, int $options, ?string &$openedPath): bool // phpcs:ignore
     {
-        $modeSplit = str_split(str_replace('b', '', $mode));
+        $modeSplit = \str_split(\str_replace('b', '', $mode));
 
         $appendMode = \in_array('a', $modeSplit, true);
         $readMode = \in_array('r', $modeSplit, true);
@@ -214,8 +214,8 @@ class PhpVfs implements StreamWrapperInterface
         if (false === $resourceExist) {
             if (true === $readMode) {
                 if (0 !== ($options & \STREAM_REPORT_ERRORS)) {
-                    trigger_error(
-                        sprintf(
+                    \trigger_error(
+                        \sprintf(
                             '%s: failed to open stream: Unknown resource.',
                             $resourcePath
                         ),
@@ -235,7 +235,7 @@ class PhpVfs implements StreamWrapperInterface
 
         if (!($file instanceof FileInterface)) {
             if (0 !== ($options & \STREAM_REPORT_ERRORS)) {
-                trigger_error(sprintf('fopen(%s): failed to open stream: Not a file.', $resource), \E_USER_WARNING);
+                \trigger_error(\sprintf('fopen(%s): failed to open stream: Not a file.', $resource), \E_USER_WARNING);
             }
 
             return false;
@@ -247,7 +247,7 @@ class PhpVfs implements StreamWrapperInterface
             $fileHandler->seekToEnd();
         } elseif (true === $writeMode) {
             $fileHandler->truncate();
-            clearstatcache();
+            \clearstatcache();
         }
 
         $this->setCurrentFile($fileHandler);
@@ -318,7 +318,7 @@ class PhpVfs implements StreamWrapperInterface
     {
         if (($file = $this->getCurrentFile()) instanceof Handler\File) {
             $file->truncate($bytes);
-            clearstatcache();
+            \clearstatcache();
         }
 
         return true;
@@ -357,7 +357,7 @@ class PhpVfs implements StreamWrapperInterface
      */
     public static function unregister(): void
     {
-        stream_wrapper_unregister(self::SCHEME);
+        \stream_wrapper_unregister(self::SCHEME);
     }
 
     /**
@@ -373,8 +373,8 @@ class PhpVfs implements StreamWrapperInterface
      */
     private function getCurrentFile(): ?Handler\FileInterface
     {
-        $options = stream_context_get_options(
-            stream_context_get_default()
+        $options = \stream_context_get_options(
+            \stream_context_get_default()
         );
 
         return $options[static::SCHEME]['currentFile'];
@@ -385,12 +385,12 @@ class PhpVfs implements StreamWrapperInterface
      */
     private function setCurrentFile(?Handler\FileInterface $file): void
     {
-        $options = stream_context_get_options(
-            stream_context_get_default()
+        $options = \stream_context_get_options(
+            \stream_context_get_default()
         );
 
         $options[static::SCHEME]['currentFile'] = $file;
 
-        stream_context_set_default($options);
+        \stream_context_set_default($options);
     }
 }

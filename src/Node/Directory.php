@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace drupol\phpvfs\Node;
 
@@ -21,7 +21,7 @@ class Directory extends FilesystemNode implements DirectoryInterface
     public function cd(string $id): DirectoryInterface
     {
         if (!$this->exist($id)) {
-            throw new \Exception(sprintf('Cannot change directory to %s: No such file or directory.', $id));
+            throw new \Exception(\sprintf('Cannot change directory to %s: No such file or directory.', $id));
         }
 
         $cwd = $this->get($id);
@@ -60,7 +60,7 @@ class Directory extends FilesystemNode implements DirectoryInterface
     {
         $path = Path::fromString($id);
 
-        if (\DIRECTORY_SEPARATOR !== $id && false !== mb_strpos($id, \DIRECTORY_SEPARATOR)) {
+        if (\DIRECTORY_SEPARATOR !== $id && false !== \mb_strpos($id, \DIRECTORY_SEPARATOR)) {
             if ($path->isAbsolute()) {
                 $firstPart = \DIRECTORY_SEPARATOR;
             } else {
@@ -130,7 +130,7 @@ class Directory extends FilesystemNode implements DirectoryInterface
     public function get(string $id): FilesystemNodeInterface
     {
         if (!$this->exist($id)) {
-            throw new \Exception(sprintf('Unable to get %s', $id));
+            throw new \Exception(\sprintf('Unable to get %s', $id));
         }
 
         $path = Path::fromString($id);
@@ -179,13 +179,13 @@ class Directory extends FilesystemNode implements DirectoryInterface
     public function rmdir(string $id): DirectoryInterface
     {
         if (!$this->exist($id)) {
-            throw new \Exception(sprintf('Cannot remove %s: No such file or directory.', $id));
+            throw new \Exception(\sprintf('Cannot remove %s: No such file or directory.', $id));
         }
 
         $path = Path::fromString($id);
 
         if ($path->isRoot()) {
-            throw new \Exception(sprintf('Cannot remove root directory.'));
+            throw new \Exception(\sprintf('Cannot remove root directory.'));
         }
 
         $cwd = $this->get($id);
